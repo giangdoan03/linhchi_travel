@@ -1,0 +1,464 @@
+* {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.custom-logo-link img {
+    width: 200px;
+}
+
+.navbar-toggler:focus {
+    box-shadow: none;
+}
+
+/* Đảm bảo swiper-container có chiều rộng đầy đủ */
+.swiper-container {
+    width: 100%;
+    height: 100%;
+}
+
+.swiper-slide {
+    font-size: 18px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+}
+
+.top_bar_content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.top_bar {
+    background: #0060a4;
+    color: #ffffff;
+    font-size: 12px;
+    padding: 5px 0;
+}
+
+.top_bar_left span {
+    margin-left: 10px;
+}
+
+.top_bar_left span i {
+    margin-right: 5px;
+}
+
+.top_bar_right span {
+    margin-right: 10px;
+}
+
+.hot_tour_slider {
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+/* Ban đầu ẩn các nút */
+.swiper-button-next,
+.swiper-button-prev {
+    opacity: 0;
+    transition: opacity 0.5s ease; /* Hiệu ứng chuyển mượt mà */
+    z-index: 10;
+    position: absolute;
+    top: 50%;
+    width: 27px;
+    height: 44px;
+    margin-top: -22px;
+    cursor: pointer;
+    pointer-events: none; /* Ngăn người dùng nhấn vào nút khi chúng bị ẩn */
+}
+
+/* Khi rê chuột vào slider, các nút sẽ hiện ra */
+.swiper-container:hover .swiper-button-next,
+.swiper-container:hover .swiper-button-prev {
+    opacity: 1;
+    pointer-events: all; /* Cho phép người dùng nhấn vào nút khi chúng hiện ra */
+}
+
+.swiper-button-next {
+    right: 10px;
+}
+
+.swiper-button-prev {
+    left: 10px;
+}
+
+.swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.tour-thumbnail img {
+    width: 100%;
+    height: auto;
+}
+
+.tour-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+.tour-excerpt {
+    margin: 10px 0;
+}
+
+.tour-read-more {
+    background-color: #007aff;
+    color: white;
+    padding: 10px 15px;
+    text-decoration: none;
+}
+
+
+.visa-service-layout .left-column .left-top-item {
+    margin-bottom: 30px; /* Khoảng cách dưới của bài viết ở hàng trên cùng của cột trái */
+}
+
+.visa-service-layout .left-column .left-bottom-items .card {
+    margin-bottom: 20px;
+}
+
+.visa-service-layout .right-column .right-item {
+    margin-bottom: 30px; /* Khoảng cách giữa các bài viết ở cột phải */
+}
+
+.visa-service-layout .card-img-top {
+    max-height: 250px; /* Điều chỉnh kích thước ảnh đại diện cho vừa vặn */
+    overflow: hidden;
+}
+
+.visa-service-layout .card-img-top img {
+    object-fit: cover; /* Giúp ảnh phù hợp với kích thước khung mà không bị biến dạng */
+}
+
+.visa-service-layout .card-body {
+    padding: 10px;
+}
+
+.visa-service-layout .card-title {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.visa-service-layout .card-title a {
+    color: #000000;
+    text-decoration: none;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.visa-service-layout .card-title a:hover {
+    text-decoration: underline;
+}
+
+.visa-service-layout .card-text {
+    font-size: 14px;
+}
+
+.visa-service-layout .btn {
+    margin-top: 10px;
+}
+
+
+
+.visa-service-layout .right-item .card {
+    border: none;
+    background-color: transparent;
+}
+
+.visa-service-layout .right-item .card-img img {
+    width: 250px; /* Điều chỉnh kích thước ảnh cho nhỏ hơn */
+    height: 120px;
+    object-fit: cover;
+    border-radius: 7px;
+}
+
+.visa-service-layout .right-item .card-body {
+    padding-left: 0;
+    padding-top: 0;
+}
+
+.visa-service-layout .right-item .card-title {
+    font-size: 16px; /* Điều chỉnh kích thước tiêu đề */
+    font-weight: bold;
+    margin: 0; /* Bỏ khoảng cách trên và dưới của tiêu đề */
+}
+
+.visa-service-layout .right-item .card-title a {
+    text-decoration: none; /* Bỏ gạch chân liên kết */
+    color: #000; /* Màu tiêu đề */
+}
+
+.visa-service-layout .right-item .card-title a:hover {
+    text-decoration: underline; /* Hiệu ứng hover cho tiêu đề */
+}
+.cam_nhan_khac_hang .card-img-top img {
+    width: 150px;   /* Đặt chiều rộng của ảnh */
+    height: 150px;  /* Đặt chiều cao của ảnh */
+    object-fit: cover;  /* Đảm bảo ảnh được cắt đều trong khung */
+    border-radius: 50%; /* Làm cho ảnh tròn */
+    display: block;
+    margin: 0 auto;  /* Căn giữa ảnh trong thẻ card */
+}
+.intro_block {
+    position: relative;
+    background: url('../images/bg-travel-vs1.png') center no-repeat;
+    width: 1056px;
+    height: 215px;
+    margin: 50px auto 50px;
+    background-size: 100% 100%;
+    margin-bottom: 80px;
+}
+.intro_block .item {
+    position: absolute;
+    width: 144px;
+    height: 144px;
+    border-radius: 72px;
+    margin: auto;
+    display: table;
+    transition: all .35s;
+}
+
+.intro_block .item:nth-child(1) {
+    bottom: 0;
+    left: 16%;
+}
+.intro_block .item:nth-child(2) {
+    top: 0;
+    left: 42.6%;
+}
+.intro_block .item:nth-child(3) {
+    bottom: 0;
+    right: 17.8%;
+}
+.intro_block .item .avt img {
+    transition: all .35s;
+}
+.intro_block .avt img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+}
+.intro_block .item .avt {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    border-radius: 50%;
+    transition: all .35s;
+}
+.intro_block .bg-1 {
+    background: #73c04a;
+}
+.intro_block .bg-2 {
+    background: #eb5b49;
+}
+.intro_block .bg-3 {
+    background: #095184;
+}
+
+.intro_block .avt {
+    overflow: hidden;
+}
+
+.intro_block .item .desc {
+    top: 100%;
+    margin: 15px auto 0;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.intro_block .item .desc p {
+    color: #333333;
+    text-transform: uppercase;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.tour_hot_block {
+    background: rgb(245, 244, 244);
+}
+
+.tour_nuoc_ngoai {
+    background: rgb(245, 244, 244);
+}
+
+.cam_nhan_khac_hang {
+    background: rgb(245, 244, 244);
+}
+
+.space_block {
+    margin-top: 50px;
+    padding-top: 10px;
+}
+.btn_read_more {
+    padding-bottom: 30px;
+}
+
+.title-block {
+    text-align: center;
+}
+.cam_nhan_khac_hang {
+    padding-top: 30px;
+}
+.cam_nhan_khac_hang .title-block {
+    padding-bottom: 30px;
+}
+.tour_nuoc_ngoai.space_block {
+    padding-top: 30px;
+}
+.tour_nuoc_ngoai .title-block {
+    padding-bottom: 30px;
+}
+.dich_vu_visa .title-block {
+    padding-bottom: 30px;
+}
+.tour_trong_nuoc .title-block {
+    padding-bottom: 30px;
+}
+.tour_hot_block .title-block {
+    padding: 30px 0;
+}
+.title_why_choose {
+    padding: 30px 0;
+    text-align: center;
+}
+
+.bg-bottom-title {
+    margin-left: auto;
+    margin-right: auto;
+}
+.bg-bottom-title {
+    height: 14px;
+    background: url('../images/bg-title-bottom.png') center no-repeat;
+    margin-bottom: 14px;
+}
+/* Đảm bảo tất cả các slide (card) có cùng chiều cao */
+.testimonial-slider .swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: stretch; /* Kéo dài khối để đảm bảo chiều cao bằng nhau */
+}
+
+.testimonial-slider .card {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Đảm bảo thẻ card bao phủ toàn bộ chiều cao của slide */
+}
+
+.testimonial-slider .card-img-top {
+    width: 100%; /* Đảm bảo ảnh đại diện chiếm toàn bộ chiều rộng */
+    height: auto;
+    padding: 15px;
+}
+
+.testimonial-slider .card-body {
+    flex: 1; /* Để nội dung trong card-body chiếm phần còn lại của chiều cao card */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Cân bằng nội dung trong card-body */
+    padding-top: 5px;
+}
+
+.testimonial-slider .card-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    text-align: center; /* Căn giữa tiêu đề */
+}
+h4.testimonial-subtitle {
+    font-size: 14px;
+    text-align: center;
+}
+.testimonial-stars {
+    font-size: 18px; /* Kích thước của biểu tượng sao */
+}
+
+.testimonial-stars i {
+    margin: 0 2px; /* Khoảng cách giữa các sao */
+}
+
+.testimonial-slider .card-text {
+    font-size: 14px;
+    text-align: justify; /* Đảm bảo nội dung căn đều */
+    flex-grow: 1; /* Đảm bảo nội dung giãn nở phù hợp */
+    font-style: italic;
+}
+.post-updated-time {
+    color: #ccc;
+    font-size: 14px;
+}
+.testimonial-slider .swiper-pagination {
+    margin-top: 20px; /* Cách phần pagination ra khỏi các slide */
+}
+
+.swiper-button-next-5, .swiper-button-prev-5 {
+    color: #333; /* Màu sắc của nút điều hướng */
+}
+.cam_nhan_khac_hang {
+    background-image: url('../images/bg-feedback.png');
+    background-repeat: no-repeat;
+    background-size: 100%;
+    padding-bottom: 40px;
+}
+footer {
+    background-color: #222;
+    color: #fff;
+}
+
+footer .text-warning {
+    color: #f9c922 !important;
+}
+
+footer a {
+    color: #fff;
+}
+
+footer a:hover {
+    color: #f9c922;
+    text-decoration: none;
+}
+
+footer .social-icons a {
+    font-size: 20px;
+    margin-right: 15px;
+}
+
+@media (max-width: 767px) {
+    .intro_block {
+        background-size: auto;
+        width: 100%;
+        height: auto;
+    }
+    .intro_block .item {
+        position: relative;
+        top: initial !important;
+        left: initial !important;
+        right: initial !important;
+        bottom: initial !important;
+        margin-bottom: 70px;
+    }
+}
+
+
+
+
+
