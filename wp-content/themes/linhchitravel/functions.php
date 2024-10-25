@@ -200,8 +200,13 @@ function mytheme_enqueue_assets() {
     // Tải file JS tùy chỉnh
     wp_enqueue_script('custom-js', get_template_directory_uri() . '/js/custom.js', array('jquery'), null, true);
 
-    wp_enqueue_style( 'font-awesome-free', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css', array(), '6.0.0-beta3' );
+    // Tải Font Awesome
+    wp_enqueue_style('font-awesome-free', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css', array(), '6.0.0');
+
+    // Tải Bootstrap Icons
+    wp_enqueue_style('bootstrap-icons', 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css', array(), '1.8.1');
 }
+
 
 // Hook vào wp_enqueue_scripts để tải các file khi cần thiết
 add_action('wp_enqueue_scripts', 'mytheme_enqueue_assets');
@@ -503,7 +508,7 @@ function display_tour_posts_swiper_shortcode($atts) {
             // Hiển thị tiêu đề và liên kết
             $output .= '<div class="card-body">';
             $output .= '<h5 class="card-title">' . get_the_title() . '</h5>';
-            $output .= '<a href="' . get_permalink() . '" class="btn btn-primary">Xem chi tiết</a>';
+            $output .= '<a href="' . get_permalink() . '" class="btn btn-outline-primary">Xem chi tiết</a>';
             $output .= '</div>'; // Đóng card-body
 
             $output .= '</div>'; // Đóng card
@@ -597,7 +602,7 @@ function tour_slider_shortcode($atts) {
             // Hiển thị tiêu đề và liên kết
             $output .= '<div class="card-body">';
             $output .= '<h5 class="card-title">' . get_the_title() . '</h5>';
-            $output .= '<a href="' . get_permalink() . '" class="btn btn-primary">Xem chi tiết</a>';
+            $output .= '<a href="' . get_permalink() . '" class="btn btn-outline-primary">Xem chi tiết</a>';
             $output .= '</div>'; // Đóng card-body
 
             $output .= '</div>'; // Đóng card
@@ -670,7 +675,7 @@ function tour_slider_nuoc_ngoai_shortcode() {
             // Hiển thị tiêu đề và liên kết
             $output .= '<div class="card-body">';
             $output .= '<h5 class="card-title">' . get_the_title() . '</h5>';
-            $output .= '<a href="' . get_permalink() . '" class="btn btn-primary">Xem chi tiết</a>';
+            $output .= '<a href="' . get_permalink() . '" class="btn btn-outline-primary">Xem chi tiết</a>';
             $output .= '</div>'; // Đóng card-body
 
             $output .= '</div>'; // Đóng card
@@ -880,6 +885,102 @@ function testimonial_slider_shortcode($atts) {
 }
 add_shortcode('testimonial_slider', 'testimonial_slider_shortcode');
 
+function get_breadcrumb() {
+    // Start the breadcrumb with the home page link and icon
+    $breadcrumb = '<a href="' . home_url() . '"><i class="bi bi-house"></i> Home</a>';
+
+    // Add the separator icon
+    $separator = ' <i class="bi bi-chevron-right"></i> ';
+
+    // Check if we are not on the homepage
+    if (!is_home()) {
+        if (is_category() || is_single()) {
+            // For categories and single posts
+            $categories = get_the_category();
+            if ($categories) {
+                foreach ($categories as $category) {
+                    $breadcrumb .= $separator . '<a href="' . get_category_link($category->term_id) . '">' . $category->name . '</a>';
+                }
+            }
+
+            if (is_single()) {
+                $breadcrumb .= $separator . get_the_title();
+            }
+
+        } elseif (is_page()) {
+            // For regular WordPress pages
+            global $post;
+            if ($post->post_parent) {
+                $parent = get_post($post->post_parent);
+                $breadcrumb .= $separator . '<a href="' . get_permalink($parent->ID) . '">' . $parent->post_title . '</a>';
+            }
+            $breadcrumb .= $separator . get_the_title();
+
+        } elseif (is_tag()) {
+            // For tags
+            $breadcrumb .= $separator . 'Tag: ' . single_tag_title('', false);
+
+        } elseif (is_day()) {
+            // For daily archives
+            $breadcrumb .= $separator . get_the_time('F jS, Y');
+
+        } elseif (is_month()) {
+            // For monthly archives
+            $breadcrumb .= $separator . get_the_time('F, Y');
+
+        } elseif (is_year()) {
+            // For yearly archives
+            $breadcrumb .= $separator . get_the_time('Y');
+
+        } elseif (is_author()) {
+            // For author pages
+            $breadcrumb .= $separator . 'Author: ' . get_the_author();
+
+        } elseif (is_search()) {
+            // For search results
+            $breadcrumb .= $separator . 'Search Results for: ' . get_search_query();
+
+        } elseif (is_404()) {
+            // For 404 pages
+            $breadcrumb .= $separator . 'Page Not Found';
+
+        } elseif (is_tax()) {
+            // For custom taxonomies
+            $taxonomy = get_queried_object();
+            if ($taxonomy && !is_wp_error($taxonomy)) {
+                $breadcrumb .= $separator . $taxonomy->name;
+            }
+        }
+    }
+
+    // Output the breadcrumb
+    echo '<nav class="breadcrumb">' . $breadcrumb . '</nav>';
+}
+
+
+
+// Custom rewrite rules for 'tour' post type and 'tour_category' taxonomy
+function custom_rewrite_rules() {
+    // Add rewrite rules for custom post type 'tour' and 'tour_category'
+    add_rewrite_rule(
+        '^tours/category/([^/]*)/?',
+        'index.php?tour_category=$matches[1]&post_type=tour',
+        'top'
+    );
+}
+add_action('init', 'custom_rewrite_rules');
+
+// Function to modify excerpt length
+function custom_excerpt_length($length) {
+    return 20; // Set your desired number of words
+}
+add_filter('excerpt_length', 'custom_excerpt_length');
+
+// Function to modify excerpt "read more" text
+function custom_excerpt_more($more) {
+    return '...'; // Replace the default […] with ...
+}
+add_filter('excerpt_more', 'custom_excerpt_more');
 
 
 

@@ -65,7 +65,7 @@ get_header(); // Gọi header
                     echo do_shortcode('[tour_posts_swiper]');
                     ?>
                     <div class="btn_read_more text-center mt-3">
-                        <button type="button" class="btn btn-primary">Xem thêm Tour</button>
+                        <button type="button" class="btn btn-outline-primary">Xem thêm Tour</button>
                     </div>
                 </div>
             </section>
@@ -84,7 +84,7 @@ get_header(); // Gọi header
                 ?>
             </div>
             <div class="btn_read_more text-center mt-3">
-                <button type="button" class="btn btn-primary">Xem thêm Tour</button>
+                <button type="button" class="btn btn-outline-primary">Xem thêm Tour</button>
             </div>
         </div>
     </div>
@@ -101,7 +101,7 @@ get_header(); // Gọi header
                 ?>
             </div>
             <div class="btn_read_more text-center mt-3">
-                <button type="button" class="btn btn-primary">Xem thêm Tour</button>
+                <button type="button" class="btn btn-outline-primary">Xem thêm Tour</button>
             </div>
         </div>
     </div>

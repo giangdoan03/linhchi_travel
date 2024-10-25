@@ -30,41 +30,50 @@
                 </div>
             </div>
         </div>
-        <div class="container">
-            <div class="row">
-                <div class="col-12 col-md-2 site-branding">
-                    <?php
-                    the_custom_logo();
-                    $linhchitravel_description = get_bloginfo('description', 'display');
-                    if ($linhchitravel_description || is_customize_preview()) :
+        <div class="container menu_top_bar">
+            <div class="pt-3 pb-3 w-100 menu_top_bar_w">
+                <div class="row">
+                    <div class="col-2 site-branding">
+                        <?php
+                        the_custom_logo();
                         ?>
-                        <p class="site-description"><?php echo $linhchitravel_description; ?></p>
-                    <?php endif; ?>
-                </div><!-- .site-branding -->
+                        <button class="toggle-btn" id="menu-btn"><span class="toggle-icon"></span></button>
+                    </div><!-- .site-branding -->
 
-                <div class="col-12 col-md-10">
-                    <!-- Bootstrap Navbar -->
-                    <nav class="navbar navbar-expand-lg navbar-light">
-                        <div class="container-fluid">
-                            <!-- Nút Hamburger (Mobile Menu) -->
-                            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#primary-menu" aria-controls="primary-menu" aria-expanded="false" aria-label="<?php esc_attr_e('Toggle navigation', 'linhchitravel'); ?>">
-                                <span class="navbar-toggler-icon"></span>
-                            </button>
-                            <!-- Menu WordPress tích hợp với Bootstrap -->
-                            <div class="collapse navbar-collapse" id="primary-menu">
-                                <?php
-                                wp_nav_menu(array(
-                                    'theme_location' => 'menu-1',
-                                    'menu_id'        => 'primary-menu',
-                                    'menu_class'     => 'navbar-nav me-auto mb-2 mb-lg-0', // Thêm class Bootstrap
-                                    'container'      => false, // Không bọc menu trong container
-                                    'items_wrap'     => '<ul id="%1$s" class="%2$s">%3$s</ul>', // Đảm bảo items_wrap được định nghĩa
-                                    'walker'         => new WP_Bootstrap_Navwalker(), // Sử dụng Navwalker để hoạt động với Bootstrap
-                                ));
-                                ?>
+                    <div class="col-10 col-md-10">
+                        <!-- Bootstrap Navbar -->
+                        <nav class="navbar navbar-expand-lg navbar-light">
+                            <div class="container-fluid">
+                                <!-- Menu WordPress tích hợp với Bootstrap -->
+                                <div class="menu-box" id="menu">
+                                    <nav class="menu-box-nav">
+                                        <?php
+                                        wp_nav_menu(array(
+                                            'theme_location' => 'menu-1',
+                                            'menu_id'        => 'primary-menu',
+                                            'menu_class'     => 'navbar-nav me-auto mb-2 mb-lg-0', // Thêm class Bootstrap
+                                            'container'      => false, // Không bọc menu trong container
+                                            'items_wrap'     => '<ul id="%1$s" class="%2$s">%3$s</ul>', // Đảm bảo items_wrap được định nghĩa
+                                            'walker'         => new WP_Bootstrap_Navwalker(), // Sử dụng Navwalker để hoạt động với Bootstrap
+                                        ));
+                                        ?>
+                                    </nav>
+                                </div>
+                                <div class="collapse navbar-collapse" id="primary-menu">
+                                    <?php
+                                    wp_nav_menu(array(
+                                        'theme_location' => 'menu-1',
+                                        'menu_id'        => 'primary-menu',
+                                        'menu_class'     => 'navbar-nav me-auto mb-2 mb-lg-0', // Thêm class Bootstrap
+                                        'container'      => false, // Không bọc menu trong container
+                                        'items_wrap'     => '<ul id="%1$s" class="%2$s">%3$s</ul>', // Đảm bảo items_wrap được định nghĩa
+                                        'walker'         => new WP_Bootstrap_Navwalker(), // Sử dụng Navwalker để hoạt động với Bootstrap
+                                    ));
+                                    ?>
+                                </div>
                             </div>
-                        </div>
-                    </nav><!-- #site-navigation -->
+                        </nav><!-- #site-navigation -->
+                    </div>
                 </div>
             </div>
         </div>

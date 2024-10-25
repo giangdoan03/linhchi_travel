@@ -159,8 +159,78 @@ jQuery(document).ready(function ($) {
         }
     });
 
+    $('#menu-btn').on('click', function(){
+        $(this).toggleClass('is-open');
+        $('#menu').fadeToggle("fast");
+    });
 
+    // Đặt display: none cho .menu-box khi màn hình rộng hơn 768px
+    $(window).on('resize', function() {
+        if ($(window).width() > 768) {
+            $('#menu').hide(); // Ẩn menu khi phóng to màn hình
+            $('#menu-btn').removeClass('is-open'); // Xóa class 'is-open' khi trở lại kích thước lớn
+        }
+    });
 
 });
+window.onload = function() {
+    const navbar = document.getElementById("navbar");
+
+    // Kiểm tra nếu phần tử navbar tồn tại
+    if (!navbar) {
+        console.info("Navbar element not found!");
+        return;
+    }
+
+    const navbarOffset = navbar.offsetTop;
+
+    // Check scroll position and toggle fixed class
+    function handleScroll() {
+        if (window.scrollY >= navbarOffset) {
+            navbar.classList.add("fixed");
+        } else {
+            navbar.classList.remove("fixed");
+        }
+    }
+
+    // Scroll event listener
+    window.addEventListener("scroll", handleScroll);
+
+    // Smooth scroll for links
+    const links = document.querySelectorAll(".scroll-link");
+    links.forEach(link => {
+        link.addEventListener("click", function(event) {
+            event.preventDefault();
+            const targetId = this.getAttribute("href").substring(1);
+            const targetElement = document.getElementById(targetId);
+            window.scrollTo({
+                top: targetElement.offsetTop - navbar.offsetHeight,
+                behavior: "smooth"
+            });
+        });
+    });
+};
+
+jQuery(document).ready(function($) {
+    // Hiển thị nút khi cuộn xuống 300px
+    $(window).scroll(function() {
+        if ($(this).scrollTop() > 300) {
+            $('#back-to-top').fadeIn();
+        } else {
+            $('#back-to-top').fadeOut();
+        }
+    });
+
+    // Sự kiện click để cuộn lên đầu trang
+    $('#back-to-top').on('click', function() {
+        $('html, body').animate({ scrollTop: 0 }, 'fast');
+        return false;
+    });
+});
+
+
+
+
+
 
 

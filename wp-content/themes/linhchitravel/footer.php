@@ -76,6 +76,8 @@
             </div>
         </div>
     </div>
+    <button id="back-to-top" title="Lên đầu trang">↑</button>
+
 </footer>
 
 </div>
