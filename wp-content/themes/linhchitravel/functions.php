@@ -983,6 +983,309 @@ function custom_excerpt_more($more) {
 add_filter('excerpt_more', 'custom_excerpt_more');
 
 
+// Register the shortcode
+add_shortcode('tour_booking_form', 'tour_booking_form_shortcode');
+function tour_booking_form_shortcode($atts) {
+    $atts = shortcode_atts(['tour_id' => 0], $atts, 'tour_booking_form');
+    ob_start(); // Start output buffering
+    ?>
+    <div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="bookingModalLabel">
+                        Du Lịch 6 nước Châu Âu: Đức - Hà Lan - Bỉ - Pháp - Thụy Sĩ - Ý
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Thông báo lỗi -->
+                    <div id="errorMessages" class="alert alert-danger" style="display: none;"></div>
+                    <!-- Thông báo thành công -->
+                    <div id="successMessage" class="alert alert-success" style="display: none;"></div>
+                    <form id="tourBookingForm">
+                        <input type="hidden" id="tourId" name="tour_id" value="<?php echo esc_attr($atts['tour_id']); ?>">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="departureDate" class="form-label">Ngày khởi hành:</label>
+                                <input type="date" class="form-control" id="departureDate" name="departureDate">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="departureLocation" class="form-label">Điểm khởi hành:</label>
+                                <input type="text" class="form-control" id="departureLocation" name="departureLocation" placeholder="Hồ Chí Minh">
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label for="adults" class="form-label">Người lớn:</label>
+                                <select class="form-select" id="adults" name="adults">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="children" class="form-label">Trẻ em (2-12):</label>
+                                <select class="form-select" id="children" name="children">
+                                    <option value="0">0</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="infants" class="form-label">Em bé (&lt;2):</label>
+                                <select class="form-select" id="infants" name="infants">
+                                    <option value="0">0</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="honorific" class="form-label">Quý danh:</label>
+                                <select class="form-select" id="honorific" name="honorific">
+                                    <option value="Ông">Ông</option>
+                                    <option value="Bà">Bà</option>
+                                    <option value="Cô">Cô</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="fullName" class="form-label">Họ tên: <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="fullName" name="fullName" required>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="phone" class="form-label">Số điện thoại: <span class="text-danger">*</span></label>
+                                <input type="tel" class="form-control" id="phone" name="phone" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="email" class="form-label">Email:</label>
+                                <input type="email" class="form-control" id="email" name="email">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="specialRequest" class="form-label">Yêu cầu đặc biệt:</label>
+                            <textarea class="form-control" id="specialRequest" name="specialRequest" rows="3"></textarea>
+                        </div>
+                        <button type="button" class="btn btn-primary" id="submitBooking">Gửi yêu cầu</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('submitBooking').addEventListener('click', function() {
+            const form = document.getElementById('tourBookingForm');
+            const formData = new FormData(form);
+
+            // Lấy các trường cần kiểm tra
+            const departureDate = formData.get('departureDate');
+            const departureLocation = formData.get('departureLocation');
+            const fullName = formData.get('fullName');
+            const phone = formData.get('phone');
+
+            // Biến để lưu các thông báo lỗi
+            let errorMessages = [];
+
+            // Kiểm tra các trường
+            if (!departureDate) errorMessages.push('Vui lòng chọn ngày khởi hành.');
+            if (!departureLocation) errorMessages.push('Vui lòng nhập điểm khởi hành.');
+            if (!fullName) errorMessages.push('Vui lòng nhập họ tên.');
+            if (!phone) errorMessages.push('Vui lòng nhập số điện thoại.');
+
+            // Nếu có lỗi, hiển thị và ngừng gửi
+            const errorDiv = document.getElementById('errorMessages');
+            if (errorMessages.length > 0) {
+                errorDiv.style.display = 'block';
+                errorDiv.innerHTML = errorMessages.join('<br>');
+                return; // Ngừng nếu có lỗi
+            } else {
+                errorDiv.style.display = 'none';
+            }
+
+            // Thêm action cho AJAX request
+            formData.append('action', 'tour_booking_submit');
+
+            // Gửi dữ liệu nếu không có lỗi
+            fetch('<?php echo admin_url('admin-ajax.php'); ?>', {
+                method: 'POST',
+                body: new URLSearchParams(formData),
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Hiển thị thông báo thành công và reset form
+                        const successDiv = document.getElementById('successMessage');
+                        successDiv.style.display = 'block';
+                        successDiv.innerText = "Gửi yêu cầu thành công!";
+                        form.reset();
+
+                        // Tự động ẩn thông báo sau 3 giây
+                        setTimeout(() => successDiv.style.display = 'none', 3000);
+                    } else {
+                        // Hiển thị thông báo lỗi từ server nếu có
+                        errorDiv.style.display = 'block';
+                        errorDiv.innerHTML = data.data || "Gửi yêu cầu không thành công, vui lòng thử lại.";
+
+                        // Tự động ẩn thông báo lỗi sau 3 giây
+                        setTimeout(() => errorDiv.style.display = 'none', 3000);
+                    }
+                })
+                .catch(error => {
+                    // Hiển thị lỗi khi có vấn đề trong quá trình gửi
+                    errorDiv.style.display = 'block';
+                    errorDiv.innerHTML = "Đã xảy ra lỗi khi gửi yêu cầu.";
+                    console.error('Error:', error);
+                });
+        });
+
+        // Reset form khi modal được đóng
+        const bookingModal = document.getElementById('bookingModal');
+        bookingModal.addEventListener('hidden.bs.modal', function() {
+            const form = document.getElementById('tourBookingForm');
+            form.reset(); // Đặt lại các trường trong form
+            document.getElementById('errorMessages').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'none';
+        });
+
+
+
+    </script>
+    <?php
+    return ob_get_clean(); // Return the output buffer content
+}
+
+add_action('wp_ajax_tour_booking_submit', 'tour_booking_submit');
+add_action('wp_ajax_nopriv_tour_booking_submit', 'tour_booking_submit');
+
+function tour_booking_submit() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'tour_booking';
+
+    // Validate required fields
+    if (empty($_POST['departureDate']) || empty($_POST['departureLocation']) || empty($_POST['fullName']) || empty($_POST['phone'])) {
+        wp_send_json_error('Missing required fields.');
+        wp_die();
+    }
+
+    // Prepare data for insertion
+    $data = [
+        'tour_id' => intval($_POST['tour_id']),
+        'departure_date' => sanitize_text_field($_POST['departureDate']),
+        'departure_location' => sanitize_text_field($_POST['departureLocation']),
+        'adults' => intval($_POST['adults']),
+        'children' => intval($_POST['children']),
+        'infants' => intval($_POST['infants']),
+        'honorific' => sanitize_text_field($_POST['honorific']),
+        'full_name' => sanitize_text_field($_POST['fullName']),
+        'phone' => sanitize_text_field($_POST['phone']),
+        'email' => sanitize_email($_POST['email']),
+        'special_request' => sanitize_textarea_field($_POST['specialRequest']),
+        'submitted_at' => current_time('mysql')
+    ];
+
+    // Insert data into the table
+    $inserted = $wpdb->insert($table_name, $data);
+
+    // Check if insertion was successful
+    if ($inserted) {
+        // Fetch tour title using the tour_id
+        $tour_title = get_the_title($data['tour_id']);
+
+        // Prepare email content
+        $to = get_option('admin_email'); // Admin email
+        $subject = "New Booking Submission for " . $tour_title;
+        $message = "
+            <h2>Booking Details</h2>
+            <p><strong>Tour:</strong> {$tour_title}</p>
+            <p><strong>Departure Date:</strong> {$data['departure_date']}</p>
+            <p><strong>Departure Location:</strong> {$data['departure_location']}</p>
+            <p><strong>Adults:</strong> {$data['adults']}</p>
+            <p><strong>Children:</strong> {$data['children']}</p>
+            <p><strong>Infants:</strong> {$data['infants']}</p>
+            <p><strong>Honorific:</strong> {$data['honorific']}</p>
+            <p><strong>Full Name:</strong> {$data['full_name']}</p>
+            <p><strong>Phone:</strong> {$data['phone']}</p>
+            <p><strong>Email:</strong> {$data['email']}</p>
+            <p><strong>Special Request:</strong> {$data['special_request']}</p>
+            <p><strong>Submitted At:</strong> {$data['submitted_at']}</p>
+        ";
+
+        // Set email headers for HTML content
+        $headers = ['Content-Type: text/html; charset=UTF-8'];
+
+        // Send the email
+        wp_mail($to, $subject, $message, $headers);
+
+        // Send a success response
+        wp_send_json_success('Booking saved successfully.');
+    } else {
+        wp_send_json_error('Error saving booking.');
+    }
+
+    wp_die(); // End AJAX request
+}
+
+
+
+
+
+// Create an admin menu for Tour Bookings
+add_action('admin_menu', 'tour_booking_admin_menu');
+function tour_booking_admin_menu() {
+    add_menu_page(
+        'Tour Bookings',           // Page title
+        'Tour Bookings',           // Menu title
+        'manage_options',          // Capability
+        'tour-booking-submissions',// Menu slug
+        'tour_booking_admin_page', // Callback function to display the page
+        'dashicons-clipboard',     // Icon (WordPress Dashicons)
+        20                         // Position
+    );
+}
+
+// Display Tour Booking submissions in the admin
+function tour_booking_admin_page() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'tour_booking';
+    $results = $wpdb->get_results("SELECT * FROM $table_name ORDER BY submitted_at DESC");
+
+    // Page title and table headers
+    echo '<div class="wrap"><h1>Tour Booking Submissions</h1>';
+    echo '<table class="wp-list-table widefat fixed striped"><thead><tr>';
+    echo '<th>ID</th><th>Tên Tour</th><th>Departure Date</th><th>Location</th><th>Adults</th><th>Children</th><th>Infants</th>';
+    echo '<th>Full Name</th><th>Phone</th><th>Email</th><th>Submitted At</th>';
+    echo '</tr></thead><tbody>';
+
+    // Display each row in the table
+    foreach ($results as $row) {
+        $tour_title = get_the_title($row->tour_id); // Lấy tên của tour bằng ID
+        echo "<tr>";
+        echo "<td>{$row->id}</td>";
+        echo "<td>{$tour_title}</td>";
+        echo "<td>{$row->departure_date}</td>";
+        echo "<td>{$row->departure_location}</td>";
+        echo "<td>{$row->adults}</td>";
+        echo "<td>{$row->children}</td>";
+        echo "<td>{$row->infants}</td>";
+        echo "<td>{$row->full_name}</td>";
+        echo "<td>{$row->phone}</td>";
+        echo "<td>{$row->email}</td>";
+        echo "<td>{$row->submitted_at}</td>";
+        echo "</tr>";
+    }
+
+    echo '</tbody></table></div>';
+}
+
 
 
 

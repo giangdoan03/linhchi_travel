@@ -196,19 +196,30 @@ window.onload = function() {
     // Scroll event listener
     window.addEventListener("scroll", handleScroll);
 
-    // Smooth scroll for links
+    // Smooth scroll for links and toggle active class
     const links = document.querySelectorAll(".scroll-link");
+
     links.forEach(link => {
         link.addEventListener("click", function(event) {
             event.preventDefault();
+
+            // Remove active class from all links
+            links.forEach(link => link.classList.remove("active"));
+
+            // Add active class to the clicked link
+            this.classList.add("active");
+
+            // Smooth scroll to target section
             const targetId = this.getAttribute("href").substring(1);
             const targetElement = document.getElementById(targetId);
+
             window.scrollTo({
                 top: targetElement.offsetTop - navbar.offsetHeight,
                 behavior: "smooth"
             });
         });
     });
+
 };
 
 jQuery(document).ready(function($) {

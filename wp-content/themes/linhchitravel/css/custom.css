@@ -578,10 +578,87 @@ footer .social-icons a {
 }
 
 section {
-    padding-top: 50px;
-    margin-bottom: 50px; /* Add some spacing between sections */
+    padding-top: 28px;
 }
 
+/* General table styling */
+table {
+    width: 100%; /* Full width */
+    border-collapse: collapse; /* Remove double borders */
+    font-family: Arial, sans-serif; /* Set font */
+    margin: 20px 0; /* Margin above and below */
+}
+
+/* Table header styling */
+thead th, tbody td {
+    padding: 12px; /* Cell padding */
+    text-align: center; /* Center-align text */
+    border: 1px solid #ddd; /* Light border for each cell */
+}
+
+/* Header background and text color */
+thead th {
+    background-color: #4CAF50; /* Dark green header background */
+    color: white; /* White text */
+    font-weight: bold;
+}
+
+/* Alternating row colors for better readability */
+tbody tr:nth-child(even) {
+    background-color: #f9f9f9; /* Light gray for even rows */
+}
+
+tbody tr:nth-child(odd) {
+    background-color: #fff; /* White for odd rows */
+}
+
+/* Highlight row on hover */
+tbody tr:hover {
+    background-color: #f1f1f1; /* Light hover effect */
+}
+
+/* Bold text styling for important content */
+td strong {
+    color: #333; /* Darker color for strong text */
+}
+
+/* Base styling for links */
+.scroll-link {
+    color: #333; /* Default link color */
+    text-decoration: none;
+    padding: 10px 15px;
+    display: inline-block;
+    position: relative;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+/* Bottom border for the active link */
+.scroll-link.active {
+    color: #007bff; /* Optional color change for the active link */
+}
+
+.scroll-link.active::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -2px; /* Position border slightly below text */
+    width: 100%;
+    height: 3px; /* Thickness of the border */
+    background-color: #007bff; /* Border color */
+    border-radius: 2px; /* Slight rounding for a softer look */
+    transition: width 0.3s ease; /* Animation for width */
+}
+
+/* Hover effect for links */
+.scroll-link:hover {
+    color: #007bff; /* Optional color change on hover */
+}
+
+/* Hover effect for border */
+.scroll-link:hover::after {
+    width: 100%;
+}
 
 #navbar {
     position: relative;
@@ -590,25 +667,26 @@ section {
     padding: 15px 10px;
     width: 100%;
     z-index: 1000;
-    margin-top: 20px;
+}
+
+#carouselExampleIndicators .carousel-inner img {
+    height: 400px; /* Adjust this value as needed */
+    object-fit: cover; /* Ensures images are cropped to fill the height */
+    width: 100%; /* Ensures images fill the width of the container */
 }
 
 #navbar.fixed {
     position: fixed;
-    top: 35px;
+    top: 0;
     left: 0;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 99999;
 }
 
 #navbar a {
     margin-right: 10px;
     text-decoration: none;
     color: #333;
-}
-
-section {
-    padding: 20px;
-    background-color: #f4f4f4;
 }
 
 section h2 {
