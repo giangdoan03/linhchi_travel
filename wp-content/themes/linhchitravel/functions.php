@@ -1234,7 +1234,12 @@ function tour_booking_submit() {
             <p><strong>Special Request:</strong> {$data['special_request']}</p>
             <p><strong>Submitted At:</strong> {$data['submitted_at']}</p>
         ";
-        $headers = ['Content-Type: text/html; charset=UTF-8'];
+        // Headers với tên người gửi là Linh Chi Travel
+        $headers = [
+            'Content-Type: text/html; charset=UTF-8',
+            'From: Linh Chi Travel <no-reply@develop.io.vn>',
+            'Reply-To: Linh Chi Travel <no-reply@develop.io.vn>'
+        ];
 
         // Gửi email đến quản trị viên
         wp_mail($admin_email, $subject, $message, $headers);
