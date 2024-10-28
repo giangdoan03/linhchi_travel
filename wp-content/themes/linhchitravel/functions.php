@@ -987,6 +987,8 @@ add_filter('excerpt_more', 'custom_excerpt_more');
 add_shortcode('tour_booking_form', 'tour_booking_form_shortcode');
 function tour_booking_form_shortcode($atts) {
     $atts = shortcode_atts(['tour_id' => 0], $atts, 'tour_booking_form');
+    // Lấy tiêu đề bài viết dựa trên tour_id
+    $tour_title = get_the_title($atts['tour_id']);
     ob_start(); // Start output buffering
     ?>
     <div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
@@ -994,7 +996,7 @@ function tour_booking_form_shortcode($atts) {
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="bookingModalLabel">
-                        Du Lịch 6 nước Châu Âu: Đức - Hà Lan - Bỉ - Pháp - Thụy Sĩ - Ý
+                        <?php echo esc_html($tour_title); // Hiển thị tiêu đề bài viết ?>
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -1248,7 +1250,7 @@ function tour_booking_submit() {
         ];
 
         // URL của Google Apps Script
-        $url = "https://script.google.com/macros/s/AKfycbx5u8LcUj_nxyLHQOa1cqx_QXvSUW2CvGP6rXRpRbJvcmVhDxmhDVx6NtzwjAJgtiZu/exec";
+        $url = "https://script.google.com/macros/s/AKfycbzxeekHi7npfEMHQiK_jwJ-2Z6GFpED0jiaFjP6HLbWgNYTUucPe5GguJROkI8SwYD5/exec";
 
         // Khởi tạo cURL để đồng bộ dữ liệu
         $ch = curl_init($url);
