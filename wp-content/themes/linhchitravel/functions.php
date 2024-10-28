@@ -1003,6 +1003,12 @@ function tour_booking_form_shortcode($atts) {
                     <div id="errorMessages" class="alert alert-danger" style="display: none;"></div>
                     <!-- Thông báo thành công -->
                     <div id="successMessage" class="alert alert-success" style="display: none;"></div>
+                    <!-- Biểu tượng loading -->
+                    <div id="loadingIcon" style="display: none; text-align: center; margin: 10px;">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
                     <form id="tourBookingForm">
                         <input type="hidden" id="tourId" name="tour_id" value="<?php echo esc_attr($atts['tour_id']); ?>">
                         <div class="row mb-3">
@@ -1113,6 +1119,9 @@ function tour_booking_form_shortcode($atts) {
             // Thêm action cho AJAX request
             formData.append('action', 'tour_booking_submit');
 
+            // Hiển thị icon loading
+            document.getElementById('loadingIcon').style.display = 'block';
+
             // Gửi dữ liệu nếu không có lỗi
             fetch('<?php echo admin_url('admin-ajax.php'); ?>', {
                 method: 'POST',
@@ -1121,6 +1130,9 @@ function tour_booking_form_shortcode($atts) {
             })
                 .then(response => response.json())
                 .then(data => {
+                    // Ẩn icon loading
+                    document.getElementById('loadingIcon').style.display = 'none';
+
                     if (data.success) {
                         // Hiển thị thông báo thành công và reset form
                         const successDiv = document.getElementById('successMessage');
@@ -1140,7 +1152,8 @@ function tour_booking_form_shortcode($atts) {
                     }
                 })
                 .catch(error => {
-                    // Hiển thị lỗi khi có vấn đề trong quá trình gửi
+                    // Ẩn icon loading và hiển thị lỗi khi có vấn đề trong quá trình gửi
+                    document.getElementById('loadingIcon').style.display = 'none';
                     errorDiv.style.display = 'block';
                     errorDiv.innerHTML = "Đã xảy ra lỗi khi gửi yêu cầu.";
                     console.error('Error:', error);
@@ -1155,13 +1168,11 @@ function tour_booking_form_shortcode($atts) {
             document.getElementById('errorMessages').style.display = 'none';
             document.getElementById('successMessage').style.display = 'none';
         });
-
-
-
     </script>
     <?php
     return ob_get_clean(); // Return the output buffer content
 }
+
 
 add_action('wp_ajax_tour_booking_submit', 'tour_booking_submit');
 add_action('wp_ajax_nopriv_tour_booking_submit', 'tour_booking_submit');
@@ -1170,13 +1181,13 @@ function tour_booking_submit() {
     global $wpdb;
     $table_name = $wpdb->prefix . 'tour_booking';
 
-    // Validate required fields
+    // Kiểm tra các trường bắt buộc
     if (empty($_POST['departureDate']) || empty($_POST['departureLocation']) || empty($_POST['fullName']) || empty($_POST['phone'])) {
         wp_send_json_error('Missing required fields.');
         wp_die();
     }
 
-    // Prepare data for insertion
+    // Chuẩn bị dữ liệu để chèn vào bảng
     $data = [
         'tour_id' => intval($_POST['tour_id']),
         'departure_date' => sanitize_text_field($_POST['departureDate']),
@@ -1192,16 +1203,14 @@ function tour_booking_submit() {
         'submitted_at' => current_time('mysql')
     ];
 
-    // Insert data into the table
+    // Chèn dữ liệu vào bảng
     $inserted = $wpdb->insert($table_name, $data);
 
-    // Check if insertion was successful
+    // Kiểm tra nếu chèn thành công
     if ($inserted) {
-        // Fetch tour title using the tour_id
+        // Gửi email thông báo cho quản trị viên
         $tour_title = get_the_title($data['tour_id']);
-
-        // Prepare email content
-        $to = get_option('admin_email'); // Admin email
+        $to = get_option('admin_email');
         $subject = "New Booking Submission for " . $tour_title;
         $message = "
             <h2>Booking Details</h2>
@@ -1218,20 +1227,52 @@ function tour_booking_submit() {
             <p><strong>Special Request:</strong> {$data['special_request']}</p>
             <p><strong>Submitted At:</strong> {$data['submitted_at']}</p>
         ";
-
-        // Set email headers for HTML content
         $headers = ['Content-Type: text/html; charset=UTF-8'];
-
-        // Send the email
         wp_mail($to, $subject, $message, $headers);
 
-        // Send a success response
-        wp_send_json_success('Booking saved successfully.');
+        // Dữ liệu để đồng bộ lên Google Sheets
+        $formData = [
+            "tour_id" => $data['tour_id'],
+            "tour_title" => $tour_title,
+            "departure_date" => $data['departure_date'],
+            "departure_location" => $data['departure_location'],
+            "adults" => $data['adults'],
+            "children" => $data['children'],
+            "infants" => $data['infants'],
+            "honorific" => $data['honorific'],
+            "full_name" => $data['full_name'],
+            "phone" => $data['phone'],
+            "email" => $data['email'],
+            "special_request" => $data['special_request'],
+            "submitted_at" => $data['submitted_at']
+        ];
+
+        // URL của Google Apps Script
+        $url = "https://script.google.com/macros/s/AKfycbx5u8LcUj_nxyLHQOa1cqx_QXvSUW2CvGP6rXRpRbJvcmVhDxmhDVx6NtzwjAJgtiZu/exec";
+
+        // Khởi tạo cURL để đồng bộ dữ liệu
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($formData));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+
+        // Thực hiện gửi request
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        // Kiểm tra phản hồi từ Google Sheets
+        if ($response == "Thành công") {
+            wp_send_json_success('Booking saved successfully and synced with Google Sheets.');
+        } else {
+            wp_send_json_error('Booking saved, but failed to sync with Google Sheets.');
+        }
     } else {
         wp_send_json_error('Error saving booking.');
     }
 
-    wp_die(); // End AJAX request
+    wp_die(); // Kết thúc AJAX request
 }
 
 
