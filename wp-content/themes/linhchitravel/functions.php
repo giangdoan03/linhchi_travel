@@ -1092,6 +1092,7 @@ function tour_booking_form_shortcode($atts) {
         document.getElementById('submitBooking').addEventListener('click', function() {
             const form = document.getElementById('tourBookingForm');
             const formData = new FormData(form);
+            const submitButton = document.getElementById('submitBooking'); // Nút gửi yêu cầu
 
             // Lấy các trường cần kiểm tra
             const departureDate = formData.get('departureDate');
@@ -1124,6 +1125,8 @@ function tour_booking_form_shortcode($atts) {
             // Hiển thị icon loading
             document.getElementById('loadingIcon').style.display = 'block';
 
+            submitButton.disabled = true;
+
             // Gửi dữ liệu nếu không có lỗi
             fetch('<?php echo admin_url('admin-ajax.php'); ?>', {
                 method: 'POST',
@@ -1134,6 +1137,7 @@ function tour_booking_form_shortcode($atts) {
                 .then(data => {
                     // Ẩn icon loading
                     document.getElementById('loadingIcon').style.display = 'none';
+                    submitButton.disabled = false;
 
                     if (data.success) {
                         // Hiển thị thông báo thành công và reset form
@@ -1157,6 +1161,7 @@ function tour_booking_form_shortcode($atts) {
                     // Ẩn icon loading và hiển thị lỗi khi có vấn đề trong quá trình gửi
                     document.getElementById('loadingIcon').style.display = 'none';
                     errorDiv.style.display = 'block';
+                    submitButton.disabled = false;
                     errorDiv.innerHTML = "Đã xảy ra lỗi khi gửi yêu cầu.";
                     console.error('Error:', error);
                 });
