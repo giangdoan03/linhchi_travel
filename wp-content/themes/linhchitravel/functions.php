@@ -1217,7 +1217,7 @@ function tour_booking_submit() {
     if ($inserted) {
         // Gửi email thông báo cho quản trị viên
         $tour_title = get_the_title($data['tour_id']);
-        $to = get_option('admin_email');
+        $admin_email = get_option('admin_email');
         $subject = "New Booking Submission for " . $tour_title;
         $message = "
             <h2>Booking Details</h2>
@@ -1235,7 +1235,29 @@ function tour_booking_submit() {
             <p><strong>Submitted At:</strong> {$data['submitted_at']}</p>
         ";
         $headers = ['Content-Type: text/html; charset=UTF-8'];
-        wp_mail($to, $subject, $message, $headers);
+
+        // Gửi email đến quản trị viên
+        wp_mail($admin_email, $subject, $message, $headers);
+
+        // Gửi email xác nhận đến người dùng
+        $user_subject = "Xác nhận đặt tour: " . $tour_title;
+        $user_message = "
+            <h2>Xác nhận đặt tour</h2>
+            <p>Chào {$data['honorific']} {$data['full_name']},</p>
+            <p>Cảm ơn bạn đã đặt tour với chúng tôi! Đây là thông tin đặt tour của bạn:</p>
+            <p><strong>Tour:</strong> {$tour_title}</p>
+            <p><strong>Ngày khởi hành:</strong> {$data['departure_date']}</p>
+            <p><strong>Điểm khởi hành:</strong> {$data['departure_location']}</p>
+            <p><strong>Số lượng người lớn:</strong> {$data['adults']}</p>
+            <p><strong>Số lượng trẻ em:</strong> {$data['children']}</p>
+            <p><strong>Số lượng em bé:</strong> {$data['infants']}</p>
+            <p><strong>Yêu cầu đặc biệt:</strong> {$data['special_request']}</p>
+            <p><strong>Thời gian gửi:</strong> {$data['submitted_at']}</p>
+            <p>Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất. Cảm ơn bạn đã chọn dịch vụ của chúng tôi!</p>
+            <p>Trân trọng,<br>Đội ngũ Du Lịch</p>
+        ";
+
+        wp_mail($data['email'], $user_subject, $user_message, $headers);
 
         // Dữ liệu để đồng bộ lên Google Sheets
         $formData = [
@@ -1281,6 +1303,7 @@ function tour_booking_submit() {
 
     wp_die(); // Kết thúc AJAX request
 }
+
 
 
 
