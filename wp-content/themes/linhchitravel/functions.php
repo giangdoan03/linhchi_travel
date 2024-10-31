@@ -1375,7 +1375,7 @@ function ajax_tour_search_form() {
                     <div class="input-group">
                         <input type="text" id="tour-search-input" name="s" placeholder="Tìm kiếm tour..." autocomplete="off" class="form-control" aria-label="Tìm kiếm tour" aria-describedby="button-addon2">
                         <input type="hidden" name="post_type" value="tour" />
-                        <button class="btn btn-outline-secondary" type="submit" id="button-addon2">
+                        <button class="btn btn-info" type="submit" id="button-addon2">
                             <i class="fas fa-search"></i> <!-- Biểu tượng kính lúp -->
                         </button>
                     </div>
@@ -1388,9 +1388,6 @@ function ajax_tour_search_form() {
     return ob_get_clean();
 }
 add_shortcode('ajax_tour_search_form', 'ajax_tour_search_form');
-
-
-
 
 function ajax_tour_search() {
     $query = isset($_POST['query']) ? sanitize_text_field($_POST['query']) : '';

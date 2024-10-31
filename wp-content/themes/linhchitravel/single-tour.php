@@ -28,21 +28,27 @@
                 <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
                     <div class="carousel-indicators">
                         <?php foreach ($images as $index => $image): ?>
-                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="<?php echo $index; ?>" class="<?php echo $index === 0 ? 'active' : ''; ?>" aria-label="Slide <?php echo $index + 1; ?>"></button>
+                            <button type="button" data-bs-target="#carouselExampleIndicators"
+                                    data-bs-slide-to="<?php echo $index; ?>"
+                                    class="<?php echo $index === 0 ? 'active' : ''; ?>"
+                                    aria-label="Slide <?php echo $index + 1; ?>"></button>
                         <?php endforeach; ?>
                     </div>
                     <div class="carousel-inner">
                         <?php foreach ($images as $index => $image): ?>
                             <div class="carousel-item <?php echo $index === 0 ? 'active' : ''; ?>">
-                                <img src="<?php echo esc_url($image['url']); ?>" class="d-block w-100" alt="<?php echo esc_attr($image['alt']); ?>">
+                                <img src="<?php echo esc_url($image['url']); ?>" class="d-block w-100"
+                                     alt="<?php echo esc_attr($image['alt']); ?>">
                             </div>
                         <?php endforeach; ?>
                     </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+                            data-bs-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                         <span class="visually-hidden">Previous</span>
                     </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+                            data-bs-slide="next">
                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                         <span class="visually-hidden">Next</span>
                     </button>
@@ -63,55 +69,17 @@
         <div class="col-md-4">
             <div class="card mb-4">
                 <div class="card-body">
-                    <p><strong><?php the_title(); ?></strong></p> <!-- Default to '9 ngày 8 đêm' if thoi_gian is empty -->
+                    <p><strong><?php the_title(); ?></strong></p>
+                    <!-- Default to '9 ngày 8 đêm' if thoi_gian is empty -->
 
-                    <p>
-                        Khởi hành:
-                        <?php
-                        $xuat_phat = get_field('khoi_hanh') ?: 'Khởi hành từ Hồ Chí Minh';
-                        echo esc_html($xuat_phat);
-                        ?>
-                    </p>
+                    <p>Khởi hành:<?php $xuat_phat = get_field('khoi_hanh') ?: '';echo esc_html($xuat_phat); ?></p>
+                    <p>Thời gian:<?php $phuong_tien = get_field('thoi_gian') ?: '';echo esc_html($phuong_tien);?></p>
+                    <p>Xuất phát :<?php $phuong_tien = get_field('xuat_phat') ?: '';echo esc_html($phuong_tien); ?></p>
+                    <p>Phương tiện :<?php $phuong_tien = get_field('phuong_tien') ?: '';echo esc_html($phuong_tien); ?></p>
+                    <p class="text-danger"><strong>Giá từ: <?php echo get_field('gia') ? esc_html(number_format(get_field('gia'), 0, '.', '.')) . '₫' : '51.490.000₫'; ?></strong></p>
+                    <p>Liên hệ tự vấn :<?php $phuong_tien = get_field('lien_he_tu_van') ?: '';echo esc_html($phuong_tien); ?></p>
 
-                    <p>
-                        Thời gian:
-                        <?php
-                        $phuong_tien = get_field('thoi_gian') ?: 'Hồ Chí Minh - Đức - Hà Lan - Bỉ - Pháp - Thụy Sĩ - Ý';
-                        echo esc_html($phuong_tien);
-                        ?>
-                    </p>
-
-                    <p>
-                        Xuất phát :
-                        <?php
-                        $phuong_tien = get_field('xuat_phat') ?: 'Hồ Chí Minh - Đức - Hà Lan - Bỉ - Pháp - Thụy Sĩ - Ý';
-                        echo esc_html($phuong_tien);
-                        ?>
-                    </p>
-                    <p>
-                        Phương tiện :
-                        <?php
-                        $phuong_tien = get_field('phuong_tien') ?: 'Hồ Chí Minh - Đức - Hà Lan - Bỉ - Pháp - Thụy Sĩ - Ý';
-                        echo esc_html($phuong_tien);
-                        ?>
-                    </p>
-
-                    <p class="text-danger">
-                        <strong>
-                            Giá từ: <?php echo get_field('gia') ? esc_html(number_format(get_field('gia'), 0, '.', '.')) . '₫' : '51.490.000₫'; ?>
-                        </strong>
-                    </p>
-                    <p>
-                        Liên hệ tự vấn :
-                        <?php
-                        $phuong_tien = get_field('lien_he_tu_van') ?: 'Hồ Chí Minh - Đức - Hà Lan - Bỉ - Pháp - Thụy Sĩ - Ý';
-                        echo esc_html($phuong_tien);
-                        ?>
-                    </p>
-
-                    <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#bookingModal">
-                        Gửi yêu cầu
-                    </button>
+                    <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#bookingModal">Gửi yêu cầu</button>
 
                     <button onclick="document.getElementById('section3').scrollIntoView({ behavior: 'smooth' });" class="btn btn-outline-warning btn-block">
                         Chi tiết lịch khởi hành
@@ -290,7 +258,8 @@
             carousel.prev();
         }
     }
-    document.getElementById("toggleAll").addEventListener("click", function() {
+
+    document.getElementById("toggleAll").addEventListener("click", function () {
         const accordions = document.querySelectorAll(".accordion-collapse");
         const isAllShown = Array.from(accordions).every(accordion => accordion.classList.contains("show"));
         accordions.forEach((accordion) => {
@@ -298,7 +267,7 @@
         });
         this.textContent = isAllShown ? "Xem chi tiết lịch trình" : "Thu gọn";
     });
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         var carousel = new bootstrap.Carousel(document.getElementById('carouselExampleIndicators'), {
             keyboard: true
         });

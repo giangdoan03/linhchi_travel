@@ -32,32 +32,40 @@ get_header();
                 </h1>
             </header>
 
-            <div class="row">
-                <?php
-                /* Start the Loop */
-                while ( have_posts() ) : the_post();
-                    if ( 'tour' === get_post_type() ) : // Hiển thị chỉ bài viết loại "tour"
-                        ?>
-                        <div class="col-md-4 mb-4">
-                            <div class="card h-100">
-                                <?php if ( has_post_thumbnail() ) : ?>
-                                    <a href="<?php the_permalink(); ?>">
-                                        <?php the_post_thumbnail('medium', array('class' => 'card-img-top')); ?>
+            <div class="container">
+                <div class="row">
+                    <?php
+                    /* Start the Loop */
+                    while ( have_posts() ) : the_post();
+                        if ( 'tour' === get_post_type() ) : // Chỉ hiển thị bài viết loại "tour"
+                            ?>
+                            <div class="col-md-4 col-sm-6 mb-4">
+                                <div class="card h-100 shadow-sm border-0">
+                                    <a href="<?php the_permalink(); ?>" class="d-block">
+                                        <?php if ( has_post_thumbnail() ) : ?>
+                                            <?php the_post_thumbnail('medium', array('class' => 'card-img-top rounded-top')); ?>
+                                        <?php else : ?>
+                                            <img src="https://placehold.co/400x300/png" alt="Placeholder Image" class="card-img-top rounded-top">
+                                        <?php endif; ?>
                                     </a>
-                                <?php endif; ?>
-                                <div class="card-body">
-                                    <h5 class="card-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h5>
-                                    <p class="card-text"><?php echo wp_trim_words( get_the_excerpt(), 20, '...' ); ?></p>
-                                </div>
-                                <div class="card-footer">
-                                    <a href="<?php the_permalink(); ?>" class="btn btn-outline-info">Xem chi tiết</a>
+                                    <div class="card-body">
+                                        <h5 class="card-title">
+                                            <a href="<?php the_permalink(); ?>" class="text-dark text-decoration-none">
+                                                <?php the_title(); ?>
+                                            </a>
+                                        </h5>
+                                        <p class="card-text"><?php echo wp_trim_words( get_the_excerpt(), 20, '...' ); ?></p>
+                                    </div>
+                                    <div class="card-footer bg-transparent border-0">
+                                        <a href="<?php the_permalink(); ?>" class="btn btn-outline-info w-100">Xem chi tiết</a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    <?php
-                    endif;
-                endwhile;
-                ?>
+                        <?php
+                        endif;
+                    endwhile;
+                    ?>
+                </div>
             </div>
 
             <!-- Bootstrap Pagination -->
