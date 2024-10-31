@@ -10,6 +10,7 @@ get_header(); // Gọi header
         <?php
             echo do_shortcode('[swiper_slider]');
         ?>
+        <?php echo do_shortcode('[ajax_tour_search_form]'); ?>
     </div>
     <div class="title-block title_why_choose">
         <h2>TẠI SAO NÊN CHỌN DỊCH VỤ TẠI LINH CHI TRAVEL ?</h2>

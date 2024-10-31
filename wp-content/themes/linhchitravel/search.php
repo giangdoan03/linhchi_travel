@@ -2,52 +2,86 @@
 /**
  * The template for displaying search results pages
  *
- * @link https://developer.wordpress.org/themes/basics/template-hierarchy/#search-result
- *
  * @package linhchitravel
  */
 
 get_header();
 ?>
+    <div class="breadcrumb-bg py-2">
+        <nav aria-label="breadcrumb">
+            <div class="container">
+                <ol class="breadcrumb">
+                    <?php
+                    // Breadcrumb logic
+                    if (function_exists('get_breadcrumb')) {
+                        get_breadcrumb();
+                    }
+                    ?>
+                </ol>
+            </div>
+        </nav>
+    </div>
+    <div id="page-search-tour" class="page-search-tour container mt-4">
+        <?php if ( have_posts() ) : ?>
+            <header class="page-header mb-4">
+                <h1 class="page-title">
+                    <?php
+                    /* translators: %s: search query. */
+                    printf( esc_html__( 'Kết quả tìm kiếm cho: %s', 'linhchitravel' ), '<span>' . get_search_query() . '</span>' );
+                    ?>
+                </h1>
+            </header>
 
-	<main id="primary" class="site-main">
+            <div class="row">
+                <?php
+                /* Start the Loop */
+                while ( have_posts() ) : the_post();
+                    if ( 'tour' === get_post_type() ) : // Hiển thị chỉ bài viết loại "tour"
+                        ?>
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100">
+                                <?php if ( has_post_thumbnail() ) : ?>
+                                    <a href="<?php the_permalink(); ?>">
+                                        <?php the_post_thumbnail('medium', array('class' => 'card-img-top')); ?>
+                                    </a>
+                                <?php endif; ?>
+                                <div class="card-body">
+                                    <h5 class="card-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h5>
+                                    <p class="card-text"><?php echo wp_trim_words( get_the_excerpt(), 20, '...' ); ?></p>
+                                </div>
+                                <div class="card-footer">
+                                    <a href="<?php the_permalink(); ?>" class="btn btn-outline-info">Xem chi tiết</a>
+                                </div>
+                            </div>
+                        </div>
+                    <?php
+                    endif;
+                endwhile;
+                ?>
+            </div>
 
-		<?php if ( have_posts() ) : ?>
+            <!-- Bootstrap Pagination -->
+            <nav class="pagination">
+                <?php
+                the_posts_pagination(array(
+                    'mid_size' => 2,
+                    'prev_text' => __('&laquo; Trước', 'linhchitravel'),
+                    'next_text' => __('Tiếp &raquo;', 'linhchitravel'),
+                    'screen_reader_text' => __(' '),
+                    'class' => 'pagination justify-content-center'
+                ));
+                ?>
+            </nav>
 
-			<header class="page-header">
-				<h1 class="page-title">
-					<?php
-					/* translators: %s: search query. */
-					printf( esc_html__( 'Search Results for: %s', 'linhchitravel' ), '<span>' . get_search_query() . '</span>' );
-					?>
-				</h1>
-			</header><!-- .page-header -->
+        <?php else : ?>
 
-			<?php
-			/* Start the Loop */
-			while ( have_posts() ) :
-				the_post();
+            <div class="alert alert-warning" role="alert">
+                <?php esc_html_e( 'Không tìm thấy kết quả nào.', 'linhchitravel' ); ?>
+            </div>
 
-				/**
-				 * Run the loop for the search to output the results.
-				 * If you want to overload this in a child theme then include a file
-				 * called content-search.php and that will be used instead.
-				 */
-				get_template_part( 'template-parts/content', 'search' );
+        <?php endif; ?>
 
-			endwhile;
-
-			the_posts_navigation();
-
-		else :
-
-			get_template_part( 'template-parts/content', 'none' );
-
-		endif;
-		?>
-
-	</main><!-- #main -->
+    </div>
 
 <?php
-get_sidebar();
 get_footer();

@@ -239,6 +239,60 @@ jQuery(document).ready(function($) {
     });
 });
 
+jQuery(document).ready(function ($) {
+    // Hiển thị kết quả khi nhấn phím cách hoặc Enter
+    $('#tour-search-input').on('keyup', function (e) {
+        var searchQuery = $(this).val();
+
+        if (e.key === ' ' || e.key === 'Enter') {
+            if (searchQuery.trim().length > 0) {
+                $.ajax({
+                    url: tourSearch.ajax_url,
+                    type: 'POST',
+                    data: {
+                        action: 'tour_search',
+                        query: searchQuery.trim()
+                    },
+                    success: function (response) {
+                        $('#tour-search-results').html(response).show();
+                    }
+                });
+            }
+        }
+    });
+
+    // Ẩn kết quả khi nhấp ra ngoài form
+    $(document).on('click', function (e) {
+        if (!$(e.target).closest('#tour-search-form').length) {
+            $('#tour-search-results').hide();
+        }
+    });
+
+    // Giữ lại nút tìm kiếm để điều hướng sang trang kết quả đầy đủ
+    $('#tour-search-button').on('click', function () {
+        var searchQuery = $('#tour-search-input').val();
+        var searchUrl = "<?php echo home_url('/'); ?>?s=" + encodeURIComponent(searchQuery) + "&post_type=tour";
+        window.location.href = searchUrl;
+    });
+});
+
+jQuery(document).ready(function ($) {
+    var $menuTopBar = $('.menu_top_bar');
+    var menuTopBarOffset = $menuTopBar.offset().top;
+
+    $(window).on('scroll', function () {
+        // Kiểm tra nếu đã cuộn xuống vượt quá vị trí ban đầu của thanh menu
+        if ($(window).scrollTop() > menuTopBarOffset) {
+            $menuTopBar.css('position', 'fixed');
+            $menuTopBar.css('top', '0'); // Đảm bảo menu luôn ở vị trí top khi cố định
+        } else {
+            // Khi cuộn đến vị trí ban đầu, bỏ `position: fixed`
+            $menuTopBar.css('position', 'static');
+        }
+    });
+});
+
+
 
 
 

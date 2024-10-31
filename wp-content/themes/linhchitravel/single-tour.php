@@ -15,7 +15,7 @@
 </div>
 
 <div class="container mt-4">
-    <h5><?php the_title(); ?></h5>
+    <h1 class="mb-4 title-single-tour"><?php the_title(); ?></h1>
     <div class="row mb-3">
         <!-- Left Section: Tour Content -->
         <div class="col-md-8">

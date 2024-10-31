@@ -146,6 +146,8 @@ function linhchitravel_scripts() {
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
 	}
+
+
 }
 add_action( 'wp_enqueue_scripts', 'linhchitravel_scripts' );
 
@@ -205,6 +207,11 @@ function mytheme_enqueue_assets() {
 
     // Tải Bootstrap Icons
     wp_enqueue_style('bootstrap-icons', 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css', array(), '1.8.1');
+
+    // Truyền URL của admin-ajax.php vào JavaScript
+    wp_localize_script('custom-js', 'tourSearch', array(
+        'ajax_url' => admin_url('admin-ajax.php')
+    ));
 }
 
 
@@ -1310,10 +1317,6 @@ function tour_booking_submit() {
 }
 
 
-
-
-
-
 // Create an admin menu for Tour Bookings
 add_action('admin_menu', 'tour_booking_admin_menu');
 function tour_booking_admin_menu() {
@@ -1361,6 +1364,61 @@ function tour_booking_admin_page() {
 
     echo '</tbody></table></div>';
 }
+
+function ajax_tour_search_form() {
+    ob_start();
+    ?>
+    <div class="form-search-tour">
+        <div class="container d-flex justify-content-center">
+            <div class="col-12 col-md-6">
+                <form id="tour-search-form" action="<?php echo home_url('/'); ?>" method="get" class="form-inline position-relative">
+                    <div class="input-group mb-3">
+                        <input type="text" id="tour-search-input" name="s" placeholder="Tìm kiếm tour..." autocomplete="off" class="form-control" aria-label="Tìm kiếm tour" aria-describedby="button-addon2">
+                        <input type="hidden" name="post_type" value="tour" />
+                        <button class="btn btn-outline-secondary" type="submit" id="button-addon2">
+                            <i class="fas fa-search"></i> <!-- Biểu tượng kính lúp -->
+                        </button>
+                    </div>
+                    <div id="tour-search-results" class="list-group position-absolute w-100 mt-1"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <?php
+    return ob_get_clean();
+}
+add_shortcode('ajax_tour_search_form', 'ajax_tour_search_form');
+
+
+
+
+function ajax_tour_search() {
+    $query = isset($_POST['query']) ? sanitize_text_field($_POST['query']) : '';
+
+    $args = array(
+        'post_type' => 'tour',
+        's' => $query,
+        'posts_per_page' => 5,
+    );
+
+    $tour_query = new WP_Query($args);
+
+    if ($tour_query->have_posts()) {
+        while ($tour_query->have_posts()) {
+            $tour_query->the_post();
+            echo '<a href="' . get_permalink() . '" class="list-group-item list-group-item-action">' . get_the_title() . '</a>';
+        }
+    } else {
+        echo '<p class="list-group-item">Không tìm thấy kết quả nào.</p>';
+    }
+
+    wp_die();
+}
+add_action('wp_ajax_tour_search', 'ajax_tour_search');
+add_action('wp_ajax_nopriv_tour_search', 'ajax_tour_search');
+
+
+
 
 
 
