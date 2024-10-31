@@ -1372,7 +1372,7 @@ function ajax_tour_search_form() {
         <div class="container d-flex justify-content-center">
             <div class="col-12 col-md-6">
                 <form id="tour-search-form" action="<?php echo home_url('/'); ?>" method="get" class="form-inline position-relative">
-                    <div class="input-group mb-3">
+                    <div class="input-group">
                         <input type="text" id="tour-search-input" name="s" placeholder="Tìm kiếm tour..." autocomplete="off" class="form-control" aria-label="Tìm kiếm tour" aria-describedby="button-addon2">
                         <input type="hidden" name="post_type" value="tour" />
                         <button class="btn btn-outline-secondary" type="submit" id="button-addon2">

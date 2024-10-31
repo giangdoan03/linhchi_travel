@@ -281,12 +281,25 @@ jQuery(document).ready(function ($) {
     var menuTopBarOffset = $menuTopBar.offset().top;
 
     $(window).on('scroll', function () {
-        // Kiểm tra nếu đã cuộn xuống vượt quá vị trí ban đầu của thanh menu
-        if ($(window).scrollTop() > menuTopBarOffset) {
-            $menuTopBar.css('position', 'fixed');
-            $menuTopBar.css('top', '0'); // Đảm bảo menu luôn ở vị trí top khi cố định
+        // Chỉ áp dụng khi màn hình nhỏ hơn 768px (kích thước phổ biến của thiết bị di động)
+        if ($(window).width() < 768) {
+            // Kiểm tra nếu đã cuộn xuống vượt quá vị trí ban đầu của thanh menu
+            if ($(window).scrollTop() > menuTopBarOffset) {
+                $menuTopBar.css('position', 'fixed');
+                $menuTopBar.css('top', '0'); // Đảm bảo menu luôn ở vị trí top khi cố định
+            } else {
+                // Khi cuộn đến vị trí ban đầu, bỏ `position: fixed`
+                $menuTopBar.css('position', 'static');
+            }
         } else {
-            // Khi cuộn đến vị trí ban đầu, bỏ `position: fixed`
+            // Đặt lại `position: static` khi ở chế độ desktop
+            $menuTopBar.css('position', 'static');
+        }
+    });
+
+    // Lắng nghe thay đổi kích thước cửa sổ để áp dụng lại logic
+    $(window).on('resize', function () {
+        if ($(window).width() >= 768) {
             $menuTopBar.css('position', 'static');
         }
     });

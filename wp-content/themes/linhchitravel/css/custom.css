@@ -838,7 +838,7 @@ section h2 {
 .form-search-tour {
     position: absolute;
     width: 100%;
-    bottom: 10px;
+    bottom: 40px;
     z-index: 999;
 }
 /* Tùy chỉnh cho khung kết quả tìm kiếm */
