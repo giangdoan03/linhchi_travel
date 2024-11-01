@@ -851,6 +851,10 @@ section h2 {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.tour-highlights ul {
+    margin-left: 0;
+}
+
 /* Kết quả tìm kiếm là các phần tử danh sách theo kiểu list-group của Bootstrap */
 #tour-search-results .list-group-item {
     padding: 10px 15px;
