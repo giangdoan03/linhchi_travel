@@ -898,7 +898,9 @@ section h2 {
 .home .list_tour_slide .h-100 {
     text-decoration: none;
 }
-
+#slider_tour_hot {
+    padding-bottom: 35px;
+}
 @media (max-width: 1024px) {
 
     .related-posts-sidebar li {

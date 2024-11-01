@@ -65,9 +65,7 @@ get_header(); // Gọi header
                     <?php
                     echo do_shortcode('[tour_posts_swiper]');
                     ?>
-                    <div class="btn_read_more text-center mt-3">
-                        <button type="button" class="btn btn-outline-primary">Xem thêm Tour</button>
-                    </div>
+
                 </div>
             </section>
         </div>
@@ -85,7 +83,10 @@ get_header(); // Gọi header
                 ?>
             </div>
             <div class="btn_read_more text-center mt-3">
-                <button type="button" class="btn btn-outline-primary">Xem thêm Tour</button>
+                <?php
+                $category_url = home_url('/tour-category/tour-trong-nuoc/');
+                echo '<a href="' . esc_url($category_url) . '" class="btn btn-outline-primary" role="button">Xem thêm Tour</a>';
+                ?>
             </div>
         </div>
     </div>
@@ -102,7 +103,10 @@ get_header(); // Gọi header
                 ?>
             </div>
             <div class="btn_read_more text-center mt-3">
-                <button type="button" class="btn btn-outline-primary">Xem thêm Tour</button>
+                <?php
+                $category_url = home_url('/tour-category/tour-nuoc-ngoai/');
+                echo '<a href="' . esc_url($category_url) . '" class="btn btn-outline-primary" role="button">Xem thêm Tour</a>';
+                ?>
             </div>
         </div>
     </div>
