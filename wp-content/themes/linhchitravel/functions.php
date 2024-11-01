@@ -555,12 +555,6 @@ if( function_exists('acf_add_options_page') ) {
         'redirect'      => false
     ));
 
-    // Thêm trang con tùy chọn (nếu cần)
-    acf_add_options_sub_page(array(
-        'page_title'    => 'Cài đặt tiêu đề',
-        'menu_title'    => 'Tiêu đề',
-        'parent_slug'   => 'acf-general-settings',
-    ));
 }
 
 

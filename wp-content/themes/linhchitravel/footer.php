@@ -25,7 +25,21 @@
         <div class="row text-center text-md-start">
             <!-- Cột 1: Logo và thông tin liên hệ -->
             <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
-                <h5 class="text-uppercase mb-4 font-weight-bold text-warning">Logo</h5>
+                <h5 class="text-uppercase mb-4 font-weight-bold text-warning">
+                    <?php
+                    // Retrieve the image field from the ACF options page
+                    $logo_company = get_field('logo_company', 'option');
+
+                    if ($logo_company) {
+                        // Display the image with an HTML <img> tag
+                        echo '<img src="' . esc_url($logo_company['url']) . '" alt="' . esc_attr($logo_company['alt']) . '" class="company-logo">';
+                    } else {
+                        echo 'No logo available'; // Optional: Display a message if no logo is set
+                    }
+                    ?>
+                </h5>
+
+
                 <p>
                     Công ty TNHH XYZ<br>
                     123 Đường ABC, Quận 1, TP.HCM<br>
@@ -67,10 +81,20 @@
         <!-- Phần bản quyền -->
         <div class="row d-flex justify-content-center mt-4">
             <div class="col-md-7 col-lg-8">
-                <p class="text-center text-md-start">
-                    © 2024 Bản quyền thuộc về:
+                <p class="text-center">
+                    © <?php echo date('Y'); ?> Bản quyền thuộc về
                     <a href="#" class="text-warning" style="text-decoration: none;">
-                        Công ty TNHH XYZ
+                        <?php
+                        // Retrieve the company name from the ACF options page
+                        $company_name = get_field('company_name', 'option');
+
+                        // Display the company name if it exists
+                        if ($company_name) {
+                            echo esc_html($company_name);
+                        } else {
+                            echo 'No company name available';
+                        }
+                        ?>
                     </a>
                 </p>
             </div>
