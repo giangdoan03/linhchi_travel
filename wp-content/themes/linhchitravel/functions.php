@@ -506,20 +506,23 @@ function display_tour_posts_swiper_shortcode($atts) {
             }
 
             // Mỗi bài viết sẽ là một Swiper slide
+            // Start Swiper slide
             $output .= '<div class="swiper-slide">';
-            $output .= '<div class="card h-100">';
 
-            // Hiển thị ảnh đại diện
+            // Wrap the card in the anchor tag
+            $output .= '<a href="' . get_permalink() . '" class="card h-100">';
+
+            // Display the featured image
             $output .= $thumbnail;
 
-            // Hiển thị tiêu đề và liên kết
+            // Display title
             $output .= '<div class="card-body">';
             $output .= '<h5 class="card-title">' . get_the_title() . '</h5>';
-            $output .= '<a href="' . get_permalink() . '" class="btn btn-outline-primary">Xem chi tiết</a>';
-            $output .= '</div>'; // Đóng card-body
+            $output .= '</div>'; // Close card-body
 
-            $output .= '</div>'; // Đóng card
-            $output .= '</div>'; // Đóng swiper-slide
+            $output .= '</a>'; // Close anchor tag wrapping the card
+            $output .= '</div>'; // Close swiper-slide
+
         }
 
         $output .= '</div>'; // Đóng swiper-wrapper
@@ -593,21 +596,25 @@ function tour_slider_shortcode($atts) {
                 $thumbnail = '<img src="https://placehold.co/400x300/png" class="card-img-top" alt="No image available">';
             }
 
-            // Mỗi bài viết sẽ là một Swiper slide
+            // Start Swiper slide
             $output .= '<div class="swiper-slide">';
+
+            // Wrap the entire card in an anchor tag
+            $output .= '<a href="' . get_permalink() . '" class="text-decoration-none">'; // Add the link with a class to remove default styles if needed
             $output .= '<div class="card h-100">';
 
-            // Hiển thị ảnh đại diện
+            // Display the featured image
             $output .= $thumbnail;
 
-            // Hiển thị tiêu đề và liên kết
+            // Display title
             $output .= '<div class="card-body">';
             $output .= '<h5 class="card-title">' . get_the_title() . '</h5>';
-            $output .= '<a href="' . get_permalink() . '" class="btn btn-outline-primary">Xem chi tiết</a>';
-            $output .= '</div>'; // Đóng card-body
+            $output .= '</div>'; // Close card-body
 
-            $output .= '</div>'; // Đóng card
-            $output .= '</div>'; // Đóng swiper-slide
+            $output .= '</div>'; // Close card
+            $output .= '</a>'; // Close anchor tag wrapping the card
+            $output .= '</div>'; // Close swiper-slide
+
         }
 
         $output .= '</div>'; // Đóng swiper-wrapper
@@ -666,21 +673,23 @@ function tour_slider_nuoc_ngoai_shortcode() {
                 $thumbnail = '<img src="https://placehold.co/400x300/png" class="card-img-top" alt="No image available">';
             }
 
-            // Mỗi bài viết sẽ là một Swiper slide
+            // Start Swiper slide
             $output .= '<div class="swiper-slide">';
-            $output .= '<div class="card h-100">';
 
-            // Hiển thị ảnh đại diện
+            // Wrap the entire card in an anchor tag
+            $output .= '<a href="' . get_permalink() . '" class="card h-100 text-decoration-none">';
+
+            // Display the featured image
             $output .= $thumbnail;
 
-            // Hiển thị tiêu đề và liên kết
+            // Display title
             $output .= '<div class="card-body">';
             $output .= '<h5 class="card-title">' . get_the_title() . '</h5>';
-            $output .= '<a href="' . get_permalink() . '" class="btn btn-outline-primary">Xem chi tiết</a>';
-            $output .= '</div>'; // Đóng card-body
+            $output .= '</div>'; // Close card-body
 
-            $output .= '</div>'; // Đóng card
-            $output .= '</div>'; // Đóng swiper-slide
+            $output .= '</a>'; // Close anchor tag wrapping the card
+            $output .= '</div>'; // Close swiper-slide
+
         }
 
         $output .= '</div>'; // Đóng swiper-wrapper
