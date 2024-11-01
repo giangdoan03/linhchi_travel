@@ -884,6 +884,12 @@ section h2 {
 .popup_booking_content {
     top: 54px;
 }
+.tour-highlights .title_info_tour {
+    background: #ffc107;
+    color: #ffffff;
+    font-size: 20px;
+    padding: 5px;
+}
 
 @media (max-width: 1024px) {
 

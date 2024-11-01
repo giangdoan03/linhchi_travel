@@ -193,7 +193,7 @@
 
                         // Display the title if it exists
                         if ($tieu_de) {
-                            echo '<h3>' . esc_html($tieu_de) . '</h3>';
+                            echo '<h3 class="title_info_tour">' . esc_html($tieu_de) . '</h3>';
                         }
 
                         // Display the content if it exists
