@@ -464,12 +464,12 @@ function display_tour_posts_swiper_shortcode($atts) {
     // Tham số cho WP_Query
     $args = array(
         'post_type' => 'tour',
-        'posts_per_page' => -1, // Điều chỉnh số lượng bài viết
+        'posts_per_page' => -1, // Adjust the number of posts
         'meta_query' => array(
             array(
-                'key' => 'show_tour_hot', // Tên trường tùy chỉnh
-                'value' => array('Yes', '1'), // Kiểm tra cả "Yes" và '1'
-                'compare' => '='
+                'key' => 'show_tour_hot', // Custom field name
+                'value' => 'tour_hot',     // Check for the specific checkbox choice
+                'compare' => 'LIKE',       // Use LIKE to match partial content in serialized data
             ),
         ),
     );
