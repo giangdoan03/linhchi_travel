@@ -43,7 +43,7 @@ get_header(); // Gọi header
         </div>
     </div>
 
-    <div class="tour_hot_block space_block">
+    <div class="tour_hot_block list_tour_slide space_block">
         <div class="container">
             <!-- Phần bài viết mới nhất -->
             <section class="latest-posts">
@@ -73,7 +73,7 @@ get_header(); // Gọi header
         </div>
     </div>
 
-    <div class="tour_trong_nuoc space_block">
+    <div class="tour_trong_nuoc list_tour_slide space_block">
         <div class="container">
             <div class="title-block">
                 <h2>Tour trong nước</h2>
@@ -90,7 +90,7 @@ get_header(); // Gọi header
         </div>
     </div>
 
-    <div class="tour_nuoc_ngoai space_block">
+    <div class="tour_nuoc_ngoai list_tour_slide space_block">
         <div class="container">
             <div class="title-block">
                 <h2>Tour nước ngoài</h2>
@@ -107,7 +107,7 @@ get_header(); // Gọi header
         </div>
     </div>
 
-    <div class="dich_vu_visa space_block">
+    <div class="dich_vu_visa list_tour_slide space_block">
         <div class="container">
             <div class="title-block">
                 <h2>Dịch vụ visa</h2>

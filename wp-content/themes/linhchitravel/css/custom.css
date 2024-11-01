@@ -891,7 +891,7 @@ section h2 {
     padding: 5px;
 }
 
-.home .space_block .swiper-slide .card.h-100 img {
+.home .list_tour_slide .swiper-slide .card.h-100 img {
     height: 300px;
     object-fit: cover;
 }
