@@ -908,6 +908,10 @@ section h2 {
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
+.bg-dark {
+    --bs-bg-opacity: 1;
+    background-color: #11adcc !important;
+}
 @media (max-width: 1024px) {
 
     .related-posts-sidebar li {
