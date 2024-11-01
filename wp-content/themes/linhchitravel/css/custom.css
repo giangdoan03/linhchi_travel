@@ -901,6 +901,13 @@ section h2 {
 #slider_tour_hot {
     padding-bottom: 35px;
 }
+.list_tour_slide .card-title {
+    font-size: 16px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
 @media (max-width: 1024px) {
 
     .related-posts-sidebar li {
