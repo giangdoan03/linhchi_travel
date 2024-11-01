@@ -881,6 +881,10 @@ section h2 {
     font-weight: 700;
 }
 
+.popup_booking_content {
+    top: 54px;
+}
+
 @media (max-width: 1024px) {
 
     .related-posts-sidebar li {

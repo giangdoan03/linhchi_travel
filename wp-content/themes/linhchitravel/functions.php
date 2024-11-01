@@ -999,7 +999,7 @@ function tour_booking_form_shortcode($atts) {
     ob_start(); // Start output buffering
     ?>
     <div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-lg popup_booking_content">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="bookingModalLabel">
