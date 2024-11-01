@@ -868,7 +868,7 @@ section h2 {
 .bl_info_tour.fixed {
     position: fixed;
     top: 85px;
-    width: 28.733333%;
+    width: 414px;
     z-index: 10;
 }
 #tour-search-results .list-group-item:hover {
