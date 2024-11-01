@@ -3,7 +3,7 @@
 <div class="breadcrumb-bg">
     <nav aria-label="breadcrumb">
         <div class="container">
-            <ol class="breadcrumb">
+            <ol class="breadcrumb py-2">
                 <?php
                 if (function_exists('get_breadcrumb')) {
                     get_breadcrumb();
@@ -14,7 +14,7 @@
     </nav>
 </div>
 
-<div class="container mt-3">
+<div class="container mt-3 ">
     <div class="row">
         <div class="col-md-8">
             <?php if (have_posts()) : ?>
