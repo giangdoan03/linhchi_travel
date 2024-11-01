@@ -67,25 +67,27 @@
         </div>
         <!-- Right Section: Booking Details -->
         <div class="col-md-4">
-            <div class="card mb-4">
-                <div class="card-body">
-                    <p><strong><?php the_title(); ?></strong></p>
-                    <!-- Default to '9 ngày 8 đêm' if thoi_gian is empty -->
+            <div class="bl_info_tour">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <p><strong><?php the_title(); ?></strong></p>
+                        <!-- Default to '9 ngày 8 đêm' if thoi_gian is empty -->
 
-                    <p><strong>Khởi hành:</strong> <?php $xuat_phat = get_field('khoi_hanh') ?: '';echo esc_html($xuat_phat); ?></p>
-                    <p><strong>Thời gian:</strong> <?php $phuong_tien = get_field('thoi_gian') ?: '';echo esc_html($phuong_tien);?></p>
-                    <p><strong>Xuất phát:</strong> <?php $phuong_tien = get_field('xuat_phat') ?: '';echo esc_html($phuong_tien); ?></p>
-                    <p><strong>Phương tiện:</strong> <?php $phuong_tien = get_field('phuong_tien') ?: '';echo esc_html($phuong_tien); ?></p>
-                    <p class="text-danger"><strong>Giá từ: <?php echo get_field('gia') ? esc_html(number_format(get_field('gia'), 0, '.', '.')) . '₫' : '51.490.000₫'; ?></strong></p>
-                    <p><strong>Liên hệ tự vấn:</strong> <?php $phuong_tien = get_field('lien_he_tu_van') ?: '';echo esc_html($phuong_tien); ?></p>
+                        <p><strong>Khởi hành:</strong> <?php $xuat_phat = get_field('khoi_hanh') ?: '';echo esc_html($xuat_phat); ?></p>
+                        <p><strong>Thời gian:</strong> <?php $phuong_tien = get_field('thoi_gian') ?: '';echo esc_html($phuong_tien);?></p>
+                        <p><strong>Xuất phát:</strong> <?php $phuong_tien = get_field('xuat_phat') ?: '';echo esc_html($phuong_tien); ?></p>
+                        <p><strong>Phương tiện:</strong> <?php $phuong_tien = get_field('phuong_tien') ?: '';echo esc_html($phuong_tien); ?></p>
+                        <p class="text-danger"><strong>Giá từ: <?php echo get_field('gia') ? esc_html(number_format(get_field('gia'), 0, '.', '.')) . '₫' : '51.490.000₫'; ?></strong></p>
+                        <p><strong>Liên hệ tự vấn:</strong> <?php $phuong_tien = get_field('lien_he_tu_van') ?: '';echo esc_html($phuong_tien); ?></p>
 
-                    <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#bookingModal">Gửi yêu cầu</button>
+                        <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#bookingModal">Gửi yêu cầu</button>
 
-                    <button onclick="document.getElementById('section3').scrollIntoView({ behavior: 'smooth' });" class="btn btn-outline-warning btn-block">
-                        Chi tiết lịch khởi hành
-                    </button>
+                        <button onclick="document.getElementById('section3').scrollIntoView({ behavior: 'smooth' });" class="btn btn-outline-warning btn-block">
+                            Chi tiết lịch khởi hành
+                        </button>
+                    </div>
+
                 </div>
-
             </div>
         </div>
     </div>
@@ -272,6 +274,33 @@
             keyboard: true
         });
     });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const blInfoTour = document.querySelector(".bl_info_tour");
+        const offsetTop = blInfoTour.offsetTop;
+
+        window.addEventListener("scroll", function () {
+            // Check if the screen width is greater than 1024px (adjust as needed)
+            if (window.innerWidth > 1024) {
+                if (window.scrollY >= offsetTop) {
+                    blInfoTour.classList.add("fixed");
+                } else {
+                    blInfoTour.classList.remove("fixed");
+                }
+            } else {
+                // Remove the 'fixed' class on smaller screens
+                blInfoTour.classList.remove("fixed");
+            }
+        });
+
+        // Also check on window resize to remove 'fixed' class on smaller screens
+        window.addEventListener("resize", function () {
+            if (window.innerWidth <= 1024) {
+                blInfoTour.classList.remove("fixed");
+            }
+        });
+    });
+
 
 </script>
 

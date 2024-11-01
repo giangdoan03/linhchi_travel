@@ -865,6 +865,12 @@ section h2 {
 #tour-search-input {
     padding-left: 10px;
 }
+.bl_info_tour.fixed {
+    position: fixed;
+    top: 85px;
+    width: 100%;
+    z-index: 10;
+}
 #tour-search-results .list-group-item:hover {
     background-color: #f8f9fa;
     color: #007bff;
