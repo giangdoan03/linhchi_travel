@@ -77,7 +77,14 @@
                         <p><strong>Thời gian:</strong> <?php $phuong_tien = get_field('thoi_gian') ?: '';echo esc_html($phuong_tien);?></p>
                         <p><strong>Xuất phát:</strong> <?php $phuong_tien = get_field('xuat_phat') ?: '';echo esc_html($phuong_tien); ?></p>
                         <p><strong>Phương tiện:</strong> <?php $phuong_tien = get_field('phuong_tien') ?: '';echo esc_html($phuong_tien); ?></p>
-                        <p class="text-danger"><strong>Giá từ: <?php echo get_field('gia') ? esc_html(number_format(get_field('gia'), 0, '.', '.')) . '₫' : '51.490.000₫'; ?></strong></p>
+                        <?php
+                        $gia_raw = get_field('gia');
+                        $gia_clean = preg_replace('/\D/', '', $gia_raw); // Remove all non-numeric characters
+                        $gia_formatted = $gia_clean ? number_format($gia_clean, 0, '.', '.') . '₫' : '';
+                        ?>
+
+                        <p class="text-danger"><strong>Giá từ: <?php echo esc_html($gia_formatted); ?></strong></p>
+
                         <p><strong>Liên hệ tự vấn:</strong> <?php $phuong_tien = get_field('lien_he_tu_van') ?: '';echo esc_html($phuong_tien); ?></p>
 
                         <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#bookingModal">Gửi yêu cầu</button>
