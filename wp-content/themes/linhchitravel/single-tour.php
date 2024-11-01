@@ -72,12 +72,12 @@
                     <p><strong><?php the_title(); ?></strong></p>
                     <!-- Default to '9 ngày 8 đêm' if thoi_gian is empty -->
 
-                    <p>Khởi hành: <?php $xuat_phat = get_field('khoi_hanh') ?: '';echo esc_html($xuat_phat); ?></p>
-                    <p>Thời gian: <?php $phuong_tien = get_field('thoi_gian') ?: '';echo esc_html($phuong_tien);?></p>
-                    <p>Xuất phát: <?php $phuong_tien = get_field('xuat_phat') ?: '';echo esc_html($phuong_tien); ?></p>
-                    <p>Phương tiện: <?php $phuong_tien = get_field('phuong_tien') ?: '';echo esc_html($phuong_tien); ?></p>
+                    <p><strong>Khởi hành:</strong> <?php $xuat_phat = get_field('khoi_hanh') ?: '';echo esc_html($xuat_phat); ?></p>
+                    <p><trong>Thời gian:</trong> <?php $phuong_tien = get_field('thoi_gian') ?: '';echo esc_html($phuong_tien);?></p>
+                    <p><strong>Xuất phát:</strong> <?php $phuong_tien = get_field('xuat_phat') ?: '';echo esc_html($phuong_tien); ?></p>
+                    <p><strong>Phương tiện:</strong> <?php $phuong_tien = get_field('phuong_tien') ?: '';echo esc_html($phuong_tien); ?></p>
                     <p class="text-danger"><strong>Giá từ: <?php echo get_field('gia') ? esc_html(number_format(get_field('gia'), 0, '.', '.')) . '₫' : '51.490.000₫'; ?></strong></p>
-                    <p>Liên hệ tự vấn: <?php $phuong_tien = get_field('lien_he_tu_van') ?: '';echo esc_html($phuong_tien); ?></p>
+                    <p><strong>Liên hệ tự vấn:</strong> <?php $phuong_tien = get_field('lien_he_tu_van') ?: '';echo esc_html($phuong_tien); ?></p>
 
                     <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#bookingModal">Gửi yêu cầu</button>
 
