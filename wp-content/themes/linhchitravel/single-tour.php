@@ -73,7 +73,7 @@
                     <!-- Default to '9 ngày 8 đêm' if thoi_gian is empty -->
 
                     <p><strong>Khởi hành:</strong> <?php $xuat_phat = get_field('khoi_hanh') ?: '';echo esc_html($xuat_phat); ?></p>
-                    <p><trong>Thời gian:</trong> <?php $phuong_tien = get_field('thoi_gian') ?: '';echo esc_html($phuong_tien);?></p>
+                    <p><strong>Thời gian:</strong> <?php $phuong_tien = get_field('thoi_gian') ?: '';echo esc_html($phuong_tien);?></p>
                     <p><strong>Xuất phát:</strong> <?php $phuong_tien = get_field('xuat_phat') ?: '';echo esc_html($phuong_tien); ?></p>
                     <p><strong>Phương tiện:</strong> <?php $phuong_tien = get_field('phuong_tien') ?: '';echo esc_html($phuong_tien); ?></p>
                     <p class="text-danger"><strong>Giá từ: <?php echo get_field('gia') ? esc_html(number_format(get_field('gia'), 0, '.', '.')) . '₫' : '51.490.000₫'; ?></strong></p>
