@@ -73,7 +73,7 @@
                         <p><strong><?php the_title(); ?></strong></p>
                         <!-- Default to '9 ngày 8 đêm' if thoi_gian is empty -->
 
-                        <p><strong>Khởi hành:</strong> <?php $xuat_phat = get_field('khoi_hanh') ?: '';echo esc_html($xuat_phat); ?></p>
+                        <p style="white-space: pre-wrap;"><strong>Khởi hành:</strong> <?php $xuat_phat = get_field('khoi_hanh') ?: '';echo esc_html($xuat_phat); ?></p>
                         <p><strong>Thời gian:</strong> <?php $phuong_tien = get_field('thoi_gian') ?: '';echo esc_html($phuong_tien);?></p>
                         <p><strong>Xuất phát:</strong> <?php $phuong_tien = get_field('xuat_phat') ?: '';echo esc_html($phuong_tien); ?></p>
                         <p><strong>Phương tiện:</strong> <?php $phuong_tien = get_field('phuong_tien') ?: '';echo esc_html($phuong_tien); ?></p>
@@ -85,7 +85,7 @@
 
                         <p class="text-danger"><strong>Giá từ: <?php echo esc_html($gia_formatted); ?></strong></p>
 
-                        <p><strong>Liên hệ tự vấn:</strong> <?php $phuong_tien = get_field('lien_he_tu_van') ?: '';echo esc_html($phuong_tien); ?></p>
+                        <p style="white-space: pre-wrap;"><strong>Liên hệ tự vấn:</strong> <?php $phuong_tien = get_field('lien_he_tu_van') ?: '';echo esc_html($phuong_tien); ?></p>
 
                         <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#bookingModal">Gửi yêu cầu</button>
 
