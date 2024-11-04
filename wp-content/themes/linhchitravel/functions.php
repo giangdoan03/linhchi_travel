@@ -1272,8 +1272,13 @@ function tour_booking_submit() {
             <p>Trân trọng,<br>Đội ngũ Du Lịch</p>
         ";
 
-        wp_mail($data['email'], $user_subject, $user_message, $headers);
+        // Lấy danh sách email nhận thông báo từ cài đặt
+        $additional_emails = get_option('tour_booking_emails', []);
+        $emails = array_merge([$admin_email], $additional_emails);
 
+        foreach ($emails as $email) {
+            wp_mail(trim($email), $subject, $message, $headers);
+        }
         // Dữ liệu để đồng bộ lên Google Sheets
         $formData = [
             "tour_id" => $data['tour_id'],
@@ -1317,6 +1322,90 @@ function tour_booking_submit() {
     }
 
     wp_die(); // Kết thúc AJAX request
+}
+
+// Tạo menu quản trị tùy chỉnh
+add_action('admin_menu', 'add_email_notification_menu');
+function add_email_notification_menu() {
+    add_options_page(
+        'Tour Booking Email Settings',
+        'Tour Booking Emails',
+        'manage_options',
+        'tour_booking_email_settings',
+        'render_email_settings_page'
+    );
+}
+
+// Giao diện trang cài đặt email
+function render_email_settings_page() {
+    // Lấy danh sách email đã lưu và đảm bảo nó là một mảng
+    $stored_emails = get_option('tour_booking_emails', []);
+    $stored_emails = is_array($stored_emails) ? $stored_emails : [];
+
+    // Xử lý thêm email
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['new_email'])) {
+        $new_email = sanitize_email($_POST['new_email']);
+
+        if ($new_email && is_email($new_email)) {
+            // Thêm email vào danh sách nếu chưa tồn tại
+            if (!in_array($new_email, $stored_emails)) {
+                $stored_emails[] = $new_email;
+                update_option('tour_booking_emails', $stored_emails);
+                echo '<div class="updated"><p>Email added successfully.</p></div>';
+            } else {
+                echo '<div class="error"><p>Email already exists in the list.</p></div>';
+            }
+        } else {
+            echo '<div class="error"><p>Invalid email address.</p></div>';
+        }
+    }
+
+    // Xử lý xóa email
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete_email'])) {
+        $delete_email = sanitize_email($_POST['delete_email']);
+        $stored_emails = array_filter($stored_emails, function($email) use ($delete_email) {
+            return $email !== $delete_email;
+        });
+        update_option('tour_booking_emails', $stored_emails);
+        echo '<div class="updated"><p>Email deleted successfully.</p></div>';
+    }
+
+    ?>
+
+    <div class="wrap">
+        <h1>Email Notification Settings</h1>
+
+        <form method="post" action="">
+            <table class="form-table">
+                <tr valign="top">
+                    <th scope="row">Add New Email</th>
+                    <td>
+                        <input type="email" name="new_email" value="" placeholder="Enter email" required style="width: 100%; max-width: 400px;" />
+                        <?php submit_button('Add Email', 'primary', 'submit', false); ?>
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <h2>Current Emails Receiving Notifications:</h2>
+        <ul>
+            <?php
+            if (!empty($stored_emails)) {
+                foreach ($stored_emails as $email) {
+                    echo '<li>' . esc_html($email) . ' 
+                        <form method="post" action="" style="display:inline;">
+                            <input type="hidden" name="delete_email" value="' . esc_attr($email) . '">
+                            <button type="submit" class="button-link-delete">Delete</button>
+                        </form>
+                    </li>';
+                }
+            } else {
+                echo '<p>No additional emails added.</p>';
+            }
+            ?>
+        </ul>
+    </div>
+    <?php
 }
 
 
