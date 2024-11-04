@@ -1226,7 +1226,7 @@ function tour_booking_submit() {
     // Kiểm tra nếu chèn thành công
     if ($inserted) {
         // Gửi email thông báo cho quản trị viên
-        $tour_title = get_the_title($data['tour_id']);
+        $tour_title = html_entity_decode(get_the_title($data['tour_id']), ENT_QUOTES, 'UTF-8');
         $admin_email = get_option('admin_email');
         $subject = "New Booking Submission for " . $tour_title;
         $message = "
