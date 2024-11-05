@@ -13,7 +13,7 @@
 <footer class="bg-dark text-white pt-5 pb-4">
     <div class="container text-center text-md-start">
         <!-- Phần khối newsletter -->
-        <div class="row mt-4">
+        <div class="row mt-4 mb-5">
             <div class="col-md-6 mx-auto">
                 <h5 class="text-uppercase mb-4 font-weight-bold text-warning text-center">Đăng ký nhận tin</h5>
                 <form class="input-group">
