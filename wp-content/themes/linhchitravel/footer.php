@@ -40,12 +40,30 @@
                 </h5>
 
 
+                <?php
+                // Lấy thông tin từ custom fields
+                $dia_chi = get_field('dia_chi', 'option');
+                $so_dien_thoai = get_field('so_dien_thoai', 'option');
+                $email = get_field('email', 'option');
+                ?>
+
                 <p>
-                    Công ty TNHH XYZ<br>
-                    123 Đường ABC, Quận 1, TP.HCM<br>
-                    Điện thoại: +84 123 456 789<br>
-                    Email: info@xyz.com
+                    <?php
+                    // Retrieve the company name from the ACF options page
+                    $company_name = get_field('company_name', 'option');
+
+                    // Display the company name if it exists
+                    if ($company_name) {
+                        echo esc_html($company_name);
+                    } else {
+                        echo 'No company name available';
+                    }
+                    ?><br>
+                    <?php echo esc_html($dia_chi); ?><br>
+                    Điện thoại: <?php echo esc_html($so_dien_thoai); ?><br>
+                    Email: <?php echo esc_html($email); ?>
                 </p>
+
             </div>
 
             <!-- Cột 2: Các liên kết nhanh -->
