@@ -913,6 +913,10 @@ section h2 {
     background-color: #11adcc !important;
 }
 
+.post, .page {
+    margin-bottom: 0;
+}
+
 /* CSS cho danh sách sale */
 footer ul {
     list-style-type: none; /* Bỏ chấm đầu dòng */
