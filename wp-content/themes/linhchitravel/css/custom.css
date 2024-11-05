@@ -912,6 +912,33 @@ section h2 {
     --bs-bg-opacity: 1;
     background-color: #11adcc !important;
 }
+
+/* CSS cho danh sách sale */
+footer ul {
+    list-style-type: none; /* Bỏ chấm đầu dòng */
+    padding: 0;
+    margin: 0;
+}
+
+footer ul li {
+    margin-bottom: 15px; /* Khoảng cách giữa các mục */
+}
+
+footer ul li strong {
+    display: block; /* Hiển thị tên và số Zalo trên các dòng riêng */
+    font-weight: bold;
+    color: #ffffff; /* Đặt màu chữ cho tên */
+}
+
+footer ul li strong + span {
+    color: #ffffff; /* Đặt màu chữ cho số Zalo */
+}
+
+footer ul li a {
+    text-decoration: none;
+}
+
+
 @media (max-width: 1024px) {
 
     .related-posts-sidebar li {

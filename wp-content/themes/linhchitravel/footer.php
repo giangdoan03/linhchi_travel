@@ -87,12 +87,30 @@
             <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
                 <h5 class="text-uppercase mb-4 font-weight-bold text-warning">Theo dõi chúng tôi</h5>
                 <p>
-                    <a href="#" class="text-white me-4"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.facebook.com/profile.php?id=100064059523976" target="_blank" class="text-white me-4"><i class="fab fa-facebook-f"></i></a>
                     <a href="#" class="text-white me-4"><i class="fab fa-twitter"></i></a>
                     <a href="#" class="text-white me-4"><i class="fab fa-google"></i></a>
                     <a href="#" class="text-white me-4"><i class="fab fa-instagram"></i></a>
                     <a href="#" class="text-white me-4"><i class="fab fa-linkedin"></i></a>
                 </p>
+                <h5 class="text-uppercase mb-2 font-weight-bold text-warning">Liên hệ</h5>
+                <ul>
+                    <?php
+                    while (have_rows('list_sale', 'option')) : the_row();
+                        $ho_ten = get_sub_field('ho_ten');
+                        $so_dien_thoai = get_sub_field('so_dien_thoai');
+                        ?>
+                        <li>
+                            <strong><?php echo esc_html($ho_ten); ?></strong>
+                            <span>Zalo <a href="https://zalo.me/<?php echo esc_attr($so_dien_thoai); ?>" target="_blank"><?php echo esc_html($so_dien_thoai); ?></a></span>
+                        </li>
+                    <?php
+                    endwhile;
+                    ?>
+                </ul>
+
+
+
             </div>
         </div>
 
