@@ -174,7 +174,8 @@
 
         // Hàm fetchTours để lấy dữ liệu và trả về Promise
         function fetchTours(typeTour, taxonomyType) {
-            return fetch(`/linhchi_travel/wp-json/custom/v1/tours?type_tour=${typeTour}`)
+            const baseUrl = window.location.hostname === 'localhost' ? '/linhchi_travel' : '';
+            return fetch(`${baseUrl}/wp-json/custom/v1/tours?type_tour=${typeTour}`)
                 .then(response => response.json())
                 .then(data => groupToursByField(data, taxonomyType));
         }
@@ -212,7 +213,10 @@
                 // Xác định tham số URL dựa trên taxonomyType
                 const urlParam = taxonomyType === 'area' ? 'tour_area' : 'national_region';
 
-                anchor.href = `/linhchi_travel/danh-sach-tour/?${urlParam}=${encodeURIComponent(toSlug(groupName))}`;
+                // Kiểm tra xem URL có chứa "localhost" không, nếu có thì thêm "/linhchi_travel", nếu không thì để trống
+                const basePath = window.location.hostname === 'localhost' ? '/linhchi_travel' : '';
+
+                anchor.href = `${basePath}/danh-sach-tour/?${urlParam}=${encodeURIComponent(toSlug(groupName))}`;
                 anchor.textContent = groupName;
                 anchor.classList.add('text-white');
                 anchor.style.textDecoration = 'none';
