@@ -84,73 +84,101 @@
 <?php wp_footer(); ?>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const tourLinks = document.querySelectorAll('#primary-menu a[href*="tour-trong-nuoc"], #primary-menu a[href*="tour-nuoc-ngoai"]');
-        const tourListContainer = document.createElement('div');
-        tourListContainer.classList.add('tour-list-container');
-        document.body.appendChild(tourListContainer);
+        const tourListContainer = document.getElementById('tour-list-container');
 
-        // Gọi hàm fetchTours khi hover vào các link tour
-        tourLinks.forEach(link => {
-            link.addEventListener('mouseenter', () => fetchTours(link));
-        });
+        // Gọi API khi trang được tải và lấy dữ liệu sẵn cho các menu
+        const domesticToursPromise = fetchTours('trong_nuoc', 'region'); // Tour trong nước, nhóm theo `region`
+        const internationalToursPromise = fetchTours('nuoc_ngoai', 'area'); // Tour nước ngoài, nhóm theo `area`
 
-        // Hàm fetchTours để lấy và hiển thị danh sách các tour
-        function fetchTours(link) {
-            const isInternational = link.getAttribute('href').includes('tour-nuoc-ngoai');
-            const typeTour = isInternational ? 'nuoc_ngoai' : 'trong_nuoc';
-            const taxonomyType = isInternational ? 'area' : 'region'; // Sử dụng `area` cho tour nước ngoài, `region` cho tour trong nước
+        Promise.all([domesticToursPromise, internationalToursPromise])
+            .then(([domesticTours, internationalTours]) => {
+                console.log("Dữ liệu đã tải:", { domesticTours, internationalTours });
 
-            fetch(`/linhchi_travel/wp-json/custom/v1/tours?type_tour=${typeTour}`)
-                .then(response => response.json())
-                .then(data => {
-                    console.log("Dữ liệu API:", data); // Log dữ liệu API để kiểm tra
-                    tourListContainer.innerHTML = ''; // Xóa nội dung cũ của container
-                    const groupedTours = groupToursByCustomField(data, taxonomyType);
-                    console.log("Dữ liệu đã nhóm:", groupedTours); // Kiểm tra dữ liệu đã nhóm
+                // Thiết lập sự kiện hover để hiển thị menu khi di chuột
+                // Thiết lập sự kiện click để hiển thị menu khi nhấn vào các liên kết
+                const menuLinks = document.querySelectorAll('#primary-menu a[href="#tour-trong-nuoc"], #primary-menu a[href="#tour-nuoc-ngoai"]');
+                menuLinks.forEach(link => {
+                    link.addEventListener('click', (event) => {
+                        event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
+                        const isDomestic = link.getAttribute('href') === '#tour-trong-nuoc';
 
-                    // Hiển thị các nhóm tour dựa trên `taxonomyType`
-                    Object.entries(groupedTours).forEach(([customFieldValue, tours]) => {
-                        const customFieldHeader = createCustomFieldHeader(customFieldValue, taxonomyType);
-                        tourListContainer.appendChild(customFieldHeader);
+                        // Kiểm tra nếu tourListContainer đang mở và hiển thị đúng loại tour, nếu có thì đóng lại
+                        const isMenuOpen = tourListContainer.style.display === 'block';
+                        if (isMenuOpen && tourListContainer.getAttribute('data-open-type') === (isDomestic ? 'domestic' : 'international')) {
+                            tourListContainer.style.display = 'none';
+                            tourListContainer.removeAttribute('data-open-type'); // Xóa thuộc tính đánh dấu loại menu đang mở
+                        } else {
+                            // Đóng menu nếu đang mở khác loại
+                            tourListContainer.style.display = 'none';
 
-                        tours.forEach(tour => {
-                            const tourDiv = document.createElement('div');
-                            tourDiv.innerHTML = `<a href="${tour.link}">${tour.title}</a>`;
-                            tourListContainer.appendChild(tourDiv);
-                        });
+                            // Hiển thị lại với nội dung tương ứng
+                            displayMegaMenu(isDomestic ? domesticTours : internationalTours, isDomestic ? 'region' : 'area');
+                            positionMenu(link, tourListContainer);
+                            tourListContainer.style.display = 'block';
+
+                            // Đánh dấu loại menu đang mở bằng cách gán giá trị cho `data-open-type`
+                            tourListContainer.setAttribute('data-open-type', isDomestic ? 'domestic' : 'international');
+                        }
                     });
+                });
 
-                    // Thêm liên kết "Xem tất cả"
-                    const viewAllLink = document.createElement('div');
-                    viewAllLink.innerHTML = `<a href="/linhchi_travel/danh-sach-tour/?type_tour=${typeTour}" class="view-all-tours">Xem tất cả ${isInternational ? 'tour nước ngoài' : 'tour trong nước'}</a>`;
-                    tourListContainer.appendChild(viewAllLink);
+            })
+            .catch(error => console.error('Error fetching tour data:', error));
 
-                    positionTourListContainer(link, tourListContainer);
-                    tourListContainer.style.display = 'block'; // Đảm bảo hiển thị container
-                    console.log("Nội dung tourListContainer:", tourListContainer.innerHTML); // Log nội dung container
+        // Hàm fetchTours để lấy dữ liệu và trả về Promise
+        function fetchTours(typeTour, taxonomyType) {
+            return fetch(`/linhchi_travel/wp-json/custom/v1/tours?type_tour=${typeTour}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.json();
                 })
-                .catch(error => console.error('Error fetching tours:', error));
+                .then(data => groupToursByField(data, taxonomyType));
         }
 
-        // Hàm nhóm các tour theo giá trị trường tùy chỉnh (area hoặc region)
-        function groupToursByCustomField(tours, customFieldType) {
+        // Hàm hiển thị menu mega với dữ liệu và loại taxonomy
+        function displayMegaMenu(groupedTours, taxonomyType) {
+            tourListContainer.innerHTML = ''; // Xóa nội dung cũ
+
+            Object.entries(groupedTours).forEach(([groupName, tourList]) => {
+                const groupHeader = document.createElement('h6');
+                const headerLink = document.createElement('a');
+
+                // Xác định tham số URL dựa trên taxonomyType
+                const urlParam = taxonomyType === 'area' ? 'tour_area' : 'national_region';
+
+                headerLink.href = `/linhchi_travel/danh-sach-tour/?${urlParam}=${encodeURIComponent(toSlug(groupName))}`;
+                headerLink.textContent = groupName;
+                headerLink.style.textDecoration = 'none';
+                headerLink.style.color = 'inherit';
+
+                groupHeader.appendChild(headerLink);
+                tourListContainer.appendChild(groupHeader);
+
+                const tourItems = document.createElement('ul');
+                tourItems.classList.add('list-unstyled');
+
+                tourList.forEach(tour => {
+                    const tourItem = document.createElement('li');
+                    tourItem.innerHTML = `<a href="${tour.link}">${tour.title}</a>`;
+                    tourItems.appendChild(tourItem);
+                });
+
+                tourListContainer.appendChild(tourItems);
+            });
+        }
+
+        // Hàm nhóm các tour theo field (area hoặc region)
+        function groupToursByField(tours, field) {
             const grouped = {};
 
             tours.forEach(tour => {
-                console.log("Tour:", tour); // Kiểm tra từng tour
-                const customFieldValues = tour[customFieldType] || []; // Lấy giá trị dựa trên `area` hoặc `region`
-                console.log("customFieldValues for", customFieldType, ":", customFieldValues); // Log giá trị custom field
-
-                // Nếu customFieldValues không phải là mảng, hãy chuyển nó thành mảng để dễ dàng xử lý
-                const valuesArray = Array.isArray(customFieldValues) ? customFieldValues : [customFieldValues];
-
-                valuesArray.forEach(value => {
-                    if (!grouped[value]) grouped[value] = [];
-                    grouped[value].push(tour);
-                });
+                const fieldValue = tour[field] || 'Khác';
+                if (!grouped[fieldValue]) grouped[fieldValue] = [];
+                grouped[fieldValue].push(tour);
             });
 
-            console.log("Grouped Tours:", grouped); // Log dữ liệu đã nhóm
             return grouped;
         }
 
@@ -167,55 +195,29 @@
                 .replace(/-+/g, '-');
         }
 
-        // Tạo phần header cho từng nhóm và thêm liên kết động
-        function createCustomFieldHeader(customFieldValue, customFieldType) {
-            const customFieldHeader = document.createElement('h4');
-            const headerLink = document.createElement('a');
-
-            // Chuyển customFieldValue thành slug
-            const customFieldSlug = toSlug(customFieldValue);
-
-            // Xác định tham số URL dựa trên customFieldType
-            let urlParam;
-            if (customFieldType === 'area') {
-                urlParam = 'tour_area';
-            } else if (customFieldType === 'region') {
-                urlParam = 'national_region';
+        // Định vị menu dưới mục menu được hover
+        function positionMenu(link, menu) {
+            // Chỉ thực hiện định vị nếu màn hình có độ rộng từ 767px trở lên
+            if (window.innerWidth >= 767) {
+                const rect = link.getBoundingClientRect();
+                menu.style.position = 'absolute';
+                menu.style.left = `${rect.left}px`;
+                menu.style.top = `${rect.bottom + window.scrollY}px`;
             } else {
-                urlParam = customFieldType; // Giữ nguyên nếu không phải là 'area' hoặc 'region'
+                // Reset vị trí menu cho thiết bị di động, nếu cần
+                menu.style.position = '';
+                menu.style.left = '';
+                menu.style.top = '';
             }
-
-            // Thiết lập URL động cho liên kết với tham số URL phù hợp
-            headerLink.href = `/linhchi_travel/danh-sach-tour/?${urlParam}=${encodeURIComponent(customFieldSlug)}`;
-            headerLink.textContent = customFieldValue;
-            headerLink.style.textDecoration = 'none';
-            headerLink.style.color = 'inherit';
-
-            customFieldHeader.appendChild(headerLink);
-            return customFieldHeader;
         }
 
 
-        // Định vị container hiển thị dưới liên kết được hover
-        function positionTourListContainer(link, container) {
-            const rect = link.getBoundingClientRect();
-            container.style.position = 'absolute';
-            container.style.left = `${rect.left}px`;
-            container.style.top = `${rect.bottom + window.scrollY}px`;
-        }
-
-        // Ẩn danh sách tour khi di chuột ra ngoài container
+        // Ẩn menu khi di chuột ra ngoài
         tourListContainer.addEventListener('mouseleave', () => {
             tourListContainer.style.display = 'none';
         });
-
-        // Ẩn danh sách tour khi click ra ngoài container
-        document.addEventListener('click', (e) => {
-            if (!tourListContainer.contains(e.target) && !Array.from(tourLinks).some(link => link.contains(e.target))) {
-                tourListContainer.style.display = 'none';
-            }
-        });
     });
+
 
 </script>
 

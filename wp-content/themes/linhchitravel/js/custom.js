@@ -160,6 +160,13 @@ jQuery(document).ready(function ($) {
     });
 
     $('#menu-btn').on('click', function(){
+        // Kiểm tra nếu tour-list-container đang hiển thị
+        if ($('#tour-list-container').css('display') === 'block') {
+            // Ẩn tour-list-container trước khi tiếp tục
+            $('#tour-list-container').hide();
+        }
+
+        // Xử lý mở/đóng menu
         $(this).toggleClass('is-open');
         $('#menu').fadeToggle("fast");
     });

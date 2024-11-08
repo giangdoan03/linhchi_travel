@@ -11,24 +11,16 @@
 
 ?>
 <footer class="bg-primary text-white pt-5 pb-4">
-    <div class="container text-center text-md-start">
+    <div class="container text-md-start">
         <div class="row">
             <!-- Cột 1: Tour trong nước -->
-            <div class="col-md-2 col-lg-2 col-xl-2 mt-3">
+            <div class="col-md-3 col-lg-3 col-xl-3 mt-3" id="domestic-tours-footer">
                 <h5 class="text-uppercase mb-4 font-weight-bold text-warning">Tour trong nước</h5>
-                <p><a href="#" class="text-white" style="text-decoration: none;">Du lịch Hà Nội</a></p>
-                <p><a href="#" class="text-white" style="text-decoration: none;">Du lịch Sapa</a></p>
-                <p><a href="#" class="text-white" style="text-decoration: none;">Du lịch Đà Nẵng</a></p>
-                <p><a href="#" class="text-white" style="text-decoration: none;">Du lịch Phú Quốc</a></p>
             </div>
 
             <!-- Cột 2: Tour nước ngoài -->
-            <div class="col-md-2 col-lg-2 col-xl-2 mt-3">
+            <div class="col-md-3 col-lg-3 col-xl-3 mt-3" id="international-tours-footer">
                 <h5 class="text-uppercase mb-4 font-weight-bold text-warning">Tour nước ngoài</h5>
-                <p><a href="#" class="text-white" style="text-decoration: none;">Du lịch Hàn Quốc</a></p>
-                <p><a href="#" class="text-white" style="text-decoration: none;">Du lịch Thái Lan</a></p>
-                <p><a href="#" class="text-white" style="text-decoration: none;">Du lịch Nhật Bản</a></p>
-                <p><a href="#" class="text-white" style="text-decoration: none;">Du lịch Dubai</a></p>
             </div>
 
             <!-- Cột 3: Hỗ trợ khách hàng -->
@@ -69,7 +61,7 @@
                 </form>
                 <h5 class="text-uppercase mb-2 font-weight-bold text-warning">Kết nối với chúng tôi</h5>
                 <p>
-                    <a href="https://www.facebook.com/" target="_blank" class="text-white me-4"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.facebook.com/profile.php?id=100064059523976" target="_blank" class="text-white me-4"><i class="fab fa-facebook-f"></i></a>
                     <a href="#" class="text-white me-4"><i class="fab fa-twitter"></i></a>
                     <a href="#" class="text-white me-4"><i class="fab fa-instagram"></i></a>
                     <a href="#" class="text-white me-4"><i class="fab fa-youtube"></i></a>
@@ -82,13 +74,21 @@
         $company_address = get_field('dia_chi', 'option');
         $company_phone = get_field('so_dien_thoai', 'option');
         $company_email = get_field('email', 'option');
+        $dkkd = get_field('giay_phep', 'option');
+        $mst = get_field('ma_so_thue', 'option');
         ?>
         <!-- Hàng cuối cùng: Logo công ty và thông tin liên hệ -->
         <div class="row mt-4">
             <div class="row">
                 <!-- Cột 1: Thông tin công ty -->
                 <div class="col-md-4">
-                    <h5 class="text-uppercase font-weight-bold text-warning">Công ty TNHH DV Du Lịch</h5>
+                    <h5 class="text-uppercase font-weight-bold text-warning">
+                        <?php
+                        // Lấy địa chỉ công ty từ ACF
+                        $company_name = get_field('company_name', 'option');
+                        echo esc_html($company_name ?: 'Địa chỉ công ty');
+                        ?>
+                    </h5>
                     <p>
                         <i class="fas fa-map-marker-alt"></i>
                         <?php
@@ -102,15 +102,15 @@
                         Email:
                         <?php
                         $company_email = get_field('email', 'option');
-                        echo '<a href="mailto:' . esc_attr($company_email) . '" class="text-warning">' . esc_html($company_email) . '</a>';
+                        echo '<a href="mailto:' . esc_attr($company_email) . '" class="text-warning text_underline_none">' . esc_html($company_email) . '</a>';
                         ?>
                     </p>
                     <p>
                         <i class="fas fa-globe"></i>
                         Website:
                         <?php
-                        $company_website = 'toptentravel.com.vn';
-                        echo '<a href="http://' . esc_attr($company_website) . '" class="text-warning" target="_blank">' . esc_html($company_website) . '</a>';
+                        $company_website = 'https://linhchitravel.vn/';
+                        echo '<a href="http://' . esc_attr($company_website) . '" class="text-warning text_underline_none" target="_blank">' . esc_html($company_website) . '</a>';
                         ?>
                     </p>
                 </div>
@@ -118,12 +118,12 @@
                 <!-- Cột 2: Thông tin giấy phép kinh doanh -->
                 <div class="col-md-5">
                     <h5 class="text-uppercase font-weight-bold text-warning">Thông tin pháp lý</h5>
-                    <p>Giấy phép kinh doanh Lữ Hành Quốc Tế 79-361/2014/TCDL - GPLHQT</p>
-                    <p>Số ĐKKD 0311400064 do Sở KHĐT Tp. HCM cấp ngày 08/12/2011</p>
+                    <p><?php echo esc_html($dkkd); ?></p>
+                    <p>Mã số thuế <?php echo esc_html($mst); ?></p>
                 </div>
 
                 <!-- Cột 3: Logo công ty -->
-                <div class="col-md-3 text-center">
+                <div class="col-md-3 text-center logo_company_ft">
                     <?php
                     // Lấy logo công ty từ ACF
                     $logo_company = get_field('logo_company', 'option');
@@ -159,6 +159,69 @@
 </div>
 
 <?php wp_footer(); ?>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const domesticFooter = document.getElementById('domestic-tours-footer');
+        const internationalFooter = document.getElementById('international-tours-footer');
 
+        // Gọi API và xử lý dữ liệu
+        Promise.all([fetchTours('trong_nuoc', 'region'), fetchTours('nuoc_ngoai', 'area')])
+            .then(([domesticTours, internationalTours]) => {
+                populateFooterLinks(domesticFooter, domesticTours, 'region');
+                populateFooterLinks(internationalFooter, internationalTours, 'area');
+            })
+            .catch(error => console.error('Error fetching footer tours:', error));
+
+        // Hàm fetchTours để lấy dữ liệu và trả về Promise
+        function fetchTours(typeTour, taxonomyType) {
+            return fetch(`/linhchi_travel/wp-json/custom/v1/tours?type_tour=${typeTour}`)
+                .then(response => response.json())
+                .then(data => groupToursByField(data, taxonomyType));
+        }
+
+        // Hàm nhóm các tour theo trường tùy chỉnh
+        function groupToursByField(tours, field) {
+            const grouped = {};
+            tours.forEach(tour => {
+                const fieldValue = tour[field] || 'Khác';
+                if (!grouped[fieldValue]) grouped[fieldValue] = [];
+                grouped[fieldValue].push(tour);
+            });
+            return grouped;
+        }
+
+        // Hàm chuyển đổi chuỗi thành slug
+        function toSlug(text) {
+            return text
+                .toLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/[đĐ]/g, 'd')
+                .replace(/[^a-z0-9\s-]/g, '')
+                .trim()
+                .replace(/\s+/g, '-')
+                .replace(/-+/g, '-');
+        }
+
+        // Hàm tạo liên kết cho footer
+        function populateFooterLinks(container, groupedTours, taxonomyType) {
+            Object.keys(groupedTours).slice(0, 4).forEach(groupName => {  // Hiển thị tối đa 4 mục
+                const link = document.createElement('p');
+                const anchor = document.createElement('a');
+
+                // Xác định tham số URL dựa trên taxonomyType
+                const urlParam = taxonomyType === 'area' ? 'tour_area' : 'national_region';
+
+                anchor.href = `/linhchi_travel/danh-sach-tour/?${urlParam}=${encodeURIComponent(toSlug(groupName))}`;
+                anchor.textContent = groupName;
+                anchor.classList.add('text-white');
+                anchor.style.textDecoration = 'none';
+
+                link.appendChild(anchor);
+                container.appendChild(link);
+            });
+        }
+    });
+</script>
 </body>
 </html>
