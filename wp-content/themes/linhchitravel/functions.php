@@ -768,17 +768,19 @@ add_shortcode('tour_slider_trong_nuoc', 'tour_slider_shortcode');
 // Tour nước ngoài
 function tour_slider_nuoc_ngoai_shortcode() {
     // Truy vấn các bài viết thuộc post type 'tour' và 'tour_category' với ID = 4
-    $args = array(
+    $type_tour = 'nuoc_ngoai'; // Hoặc giá trị bạn muốn lọc, có thể lấy từ biến $type_tour được định nghĩa trước đó.
+
+    $args = [
         'post_type' => 'tour',
-        'tax_query' => array(
-            array(
-                'taxonomy' => 'tour_category',
-                'field' => 'term_id',
-                'terms' => 4, // Lấy theo tag_ID = 4
-            ),
-        ),
-        'posts_per_page' => -1, // Hiển thị tất cả bài viết hoặc số lượng bạn muốn
-    );
+        'posts_per_page' => -1, // Hiển thị tất cả bài viết hoặc giới hạn số lượng nếu bạn muốn
+        'meta_query' => [
+            [
+                'key' => 'type_tour', // Tên của custom field
+                'value' => $type_tour, // Giá trị để lọc
+                'compare' => '=' // So sánh giá trị
+            ]
+        ]
+    ];
 
     // WP_Query tùy chỉnh
     $query = new WP_Query($args);
