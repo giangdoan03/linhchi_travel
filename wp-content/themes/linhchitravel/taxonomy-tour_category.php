@@ -31,8 +31,27 @@
                                 ?>
                                 <div class="card-body">
                                     <h5 class="card-title"><?php the_title(); ?></h5>
+
+                                    <?php
+                                    // Thêm thông tin tour
+                                    $gia_raw = get_field('gia');
+                                    $gia_clean = preg_replace('/\D/', '', $gia_raw); // Loại bỏ các ký tự không phải số
+                                    $gia_formatted = $gia_clean ? number_format($gia_clean, 0, '.', '.') . '₫' : 'Liên hệ';
+
+                                    $khoi_hanh = get_field('khoi_hanh') ?: 'N/A';
+                                    $thoi_gian = get_field('thoi_gian') ?: 'N/A';
+                                    $xuat_phat = get_field('xuat_phat') ?: 'N/A';
+                                    $phuong_tien = get_field('phuong_tien') ?: 'N/A';
+
+                                    echo '<p class="text-danger"><strong>Giá từ: ' . esc_html($gia_formatted) . '</strong></p>';
+                                    echo '<p><strong>Khởi hành:</strong> ' . esc_html($khoi_hanh) . '</p>';
+                                    echo '<p><strong>Thời gian:</strong> ' . esc_html($thoi_gian) . '</p>';
+                                    echo '<p><strong>Xuất phát:</strong> ' . esc_html($xuat_phat) . '</p>';
+                                    echo '<p><strong>Phương tiện:</strong> ' . esc_html($phuong_tien) . '</p>';
+                                    ?>
+
                                     <p class="card-text"><?php the_excerpt(); ?></p>
-                                    <a href="<?php the_permalink(); ?>" class="btn btn-outline-primary">Chi tiết Tour</a>
+                                    <a href="<?php the_permalink(); ?>" class="btn btn-outline-info">Chi tiết Tour</a>
                                 </div>
                             </div>
                         </div>

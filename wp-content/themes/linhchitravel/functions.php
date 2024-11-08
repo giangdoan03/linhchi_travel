@@ -313,6 +313,63 @@ function create_tour_taxonomy() {
 
     // Đăng ký taxonomy 'tour_category' cho Custom Post Type 'tour'
     register_taxonomy('tour_category', array('tour'), $args);
+
+
+    // Taxonomy "tour_area"
+    $labels_area = array(
+        'name'              => _x('Tour Areas', 'taxonomy general name', 'text_domain'),
+        'singular_name'     => _x('Tour Area', 'taxonomy singular name', 'text_domain'),
+        'search_items'      => __('Search Tour Areas', 'text_domain'),
+        'all_items'         => __('All Tour Areas', 'text_domain'),
+        'parent_item'       => __('Parent Tour Area', 'text_domain'),
+        'parent_item_colon' => __('Parent Tour Area:', 'text_domain'),
+        'edit_item'         => __('Edit Tour Area', 'text_domain'),
+        'update_item'       => __('Update Tour Area', 'text_domain'),
+        'add_new_item'      => __('Add New Tour Area', 'text_domain'),
+        'new_item_name'     => __('New Tour Area Name', 'text_domain'),
+        'menu_name'         => __('Tour Areas', 'text_domain'),
+    );
+
+
+    $args_area = array(
+        'hierarchical'      => true, // Cho phép phân cấp như category
+        'labels'            => $labels_area,
+        'show_ui'           => true,
+        'show_admin_column' => true,
+        'query_var'         => true,
+        'rewrite'           => array('slug' => 'tour-area'), // Đường dẫn slug cho taxonomy
+    );
+
+    // Đăng ký taxonomy 'tour_area' cho Custom Post Type 'tour'
+    register_taxonomy('tour_area', array('tour'), $args_area);
+
+    // Taxonomy "national_region"
+    $labels_national_region = array(
+        'name'              => _x('National Regions', 'taxonomy general name', 'text_domain'),
+        'singular_name'     => _x('National Region', 'taxonomy singular name', 'text_domain'),
+        'search_items'      => __('Search National Regions', 'text_domain'),
+        'all_items'         => __('All National Regions', 'text_domain'),
+        'parent_item'       => __('Parent National Region', 'text_domain'),
+        'parent_item_colon' => __('Parent National Region:', 'text_domain'),
+        'edit_item'         => __('Edit National Region', 'text_domain'),
+        'update_item'       => __('Update National Region', 'text_domain'),
+        'add_new_item'      => __('Add New National Region', 'text_domain'),
+        'new_item_name'     => __('New National Region Name', 'text_domain'),
+        'menu_name'         => __('National Regions', 'text_domain'),
+    );
+
+    $args_national_region = array(
+        'hierarchical'      => true,
+        'labels'            => $labels_national_region,
+        'show_ui'           => true,
+        'show_admin_column' => true,
+        'query_var'         => true,
+        'rewrite'           => array('slug' => 'national-region'),
+    );
+
+    // Đăng ký taxonomy 'national_region' cho Custom Post Type 'tour'
+    register_taxonomy('national_region', array('tour'), $args_national_region);
+
 }
 add_action('init', 'create_tour_taxonomy', 0);
 
@@ -518,6 +575,40 @@ function display_tour_posts_swiper_shortcode($atts) {
             // Display title
             $output .= '<div class="card-body">';
             $output .= '<h5 class="card-title">' . get_the_title() . '</h5>';
+
+            // Thêm thông tin tour bên dưới tiêu đề
+            $ma_tour = get_field('ma_tour');
+            $thoi_gian = get_field('thoi_gian');
+            $phuong_tien = get_field('phuong_tien');
+
+            // Lấy giá tour
+            $gia_raw = get_field('gia');
+            $gia_clean = preg_replace('/\D/', '', $gia_raw); // Remove all non-numeric characters
+            $gia_formatted = $gia_clean ? number_format($gia_clean, 0, '.', '.') . '₫' : '';
+
+            // Hiển thị giá từ
+            $output .= '<p class="text-danger"><strong>' . esc_html($gia_formatted) . '</strong></p>';
+
+
+            $output .= '<p style="white-space: pre-wrap;"><span>Mã Tour:</span> ' . esc_html($ma_tour) . '</p>';
+            // Lấy số sao của khách sạn
+            $hotel_number_star = get_field('hotel_number_star');
+            $output .= '<p><span>Khách sạn:</span> ';
+
+            for ($i = 1; $i <= 5; $i++) {
+                if ($i <= (int)$hotel_number_star) {
+                    // Sao sáng
+                    $output .= '<span style="color: gold;">&#9733;</span>'; // Biểu tượng ngôi sao sáng (unicode cho ★)
+                } else {
+                    // Sao mờ
+                    $output .= '<span style="color: lightgray;">&#9733;</span>'; // Biểu tượng ngôi sao mờ
+                }
+            }
+
+            $output .= '</p>'; // Đóng thẻ p của Khách sạn
+            $output .= '<p><span>Thời gian:</span> ' . esc_html($thoi_gian) . '</p>';
+            $output .= '<p><span>Phương tiện:</span> ' . esc_html($phuong_tien) . '</p>';
+
             $output .= '</div>'; // Close card-body
 
             $output .= '</a>'; // Close anchor tag wrapping the card
@@ -564,17 +655,19 @@ if( function_exists('acf_add_options_page') ) {
 // Tạo shortcode hiển thị slider Swiper cho post type 'tour' và taxonomy 'tour_category' với tag_ID = 3
 function tour_slider_shortcode($atts) {
     // Truy vấn các bài viết thuộc post type 'tour' và 'tour_category' với ID = 3
-    $args = array(
+    $type_tour = 'trong_nuoc'; // Hoặc giá trị bạn muốn lọc, có thể lấy từ biến $type_tour được định nghĩa trước đó.
+
+    $args = [
         'post_type' => 'tour',
-        'tax_query' => array(
-            array(
-                'taxonomy' => 'tour_category',
-                'field' => 'term_id',
-                'terms' => 3, // Lấy theo tag_ID = 3
-            ),
-        ),
-        'posts_per_page' => -1, // Hiển thị tất cả bài viết hoặc số lượng bạn muốn
-    );
+        'posts_per_page' => -1, // Hiển thị tất cả bài viết hoặc giới hạn số lượng nếu bạn muốn
+        'meta_query' => [
+            [
+                'key' => 'type_tour', // Tên của custom field
+                'value' => $type_tour, // Giá trị để lọc
+                'compare' => '=' // So sánh giá trị
+            ]
+        ]
+    ];
 
     // WP_Query tùy chỉnh
     $query = new WP_Query($args);
@@ -609,6 +702,40 @@ function tour_slider_shortcode($atts) {
             // Display title
             $output .= '<div class="card-body">';
             $output .= '<h5 class="card-title">' . get_the_title() . '</h5>';
+
+            // Thêm thông tin tour bên dưới tiêu đề
+            $ma_tour = get_field('ma_tour');
+            $thoi_gian = get_field('thoi_gian');
+            $phuong_tien = get_field('phuong_tien');
+
+            // Lấy giá tour
+            $gia_raw = get_field('gia');
+            $gia_clean = preg_replace('/\D/', '', $gia_raw); // Remove all non-numeric characters
+            $gia_formatted = $gia_clean ? number_format($gia_clean, 0, '.', '.') . '₫' : '';
+
+            // Hiển thị giá từ
+            $output .= '<p class="text-danger"><strong>' . esc_html($gia_formatted) . '</strong></p>';
+
+
+            $output .= '<p style="white-space: pre-wrap;"><span>Mã Tour:</span> ' . esc_html($ma_tour) . '</p>';
+            // Lấy số sao của khách sạn
+            $hotel_number_star = get_field('hotel_number_star');
+            $output .= '<p><span>Khách sạn:</span> ';
+
+            for ($i = 1; $i <= 5; $i++) {
+                if ($i <= (int)$hotel_number_star) {
+                    // Sao sáng
+                    $output .= '<span style="color: gold;">&#9733;</span>'; // Biểu tượng ngôi sao sáng (unicode cho ★)
+                } else {
+                    // Sao mờ
+                    $output .= '<span style="color: lightgray;">&#9733;</span>'; // Biểu tượng ngôi sao mờ
+                }
+            }
+
+            $output .= '</p>'; // Đóng thẻ p của Khách sạn
+            $output .= '<p><span>Thời gian:</span> ' . esc_html($thoi_gian) . '</p>';
+            $output .= '<p><span>Phương tiện:</span> ' . esc_html($phuong_tien) . '</p>';
+
             $output .= '</div>'; // Close card-body
 
             $output .= '</div>'; // Close card
@@ -685,6 +812,41 @@ function tour_slider_nuoc_ngoai_shortcode() {
             // Display title
             $output .= '<div class="card-body">';
             $output .= '<h5 class="card-title">' . get_the_title() . '</h5>';
+
+
+            // Thêm thông tin tour bên dưới tiêu đề
+            $ma_tour = get_field('ma_tour');
+            $thoi_gian = get_field('thoi_gian');
+            $phuong_tien = get_field('phuong_tien');
+
+            // Lấy giá tour
+            $gia_raw = get_field('gia');
+            $gia_clean = preg_replace('/\D/', '', $gia_raw); // Remove all non-numeric characters
+            $gia_formatted = $gia_clean ? number_format($gia_clean, 0, '.', '.') . '₫' : '';
+
+            // Hiển thị giá từ
+            $output .= '<p class="text-danger"><strong>' . esc_html($gia_formatted) . '</strong></p>';
+
+
+            $output .= '<p style="white-space: pre-wrap;"><span>Mã Tour:</span> ' . esc_html($ma_tour) . '</p>';
+            // Lấy số sao của khách sạn
+            $hotel_number_star = get_field('hotel_number_star');
+            $output .= '<p><span>Khách sạn:</span> ';
+
+            for ($i = 1; $i <= 5; $i++) {
+                if ($i <= (int)$hotel_number_star) {
+                    // Sao sáng
+                    $output .= '<span style="color: gold;">&#9733;</span>'; // Biểu tượng ngôi sao sáng (unicode cho ★)
+                } else {
+                    // Sao mờ
+                    $output .= '<span style="color: lightgray;">&#9733;</span>'; // Biểu tượng ngôi sao mờ
+                }
+            }
+
+            $output .= '</p>'; // Đóng thẻ p của Khách sạn
+            $output .= '<p><span>Thời gian:</span> ' . esc_html($thoi_gian) . '</p>';
+            $output .= '<p><span>Phương tiện:</span> ' . esc_html($phuong_tien) . '</p>';
+
             $output .= '</div>'; // Close card-body
 
             $output .= '</a>'; // Close anchor tag wrapping the card
@@ -1505,6 +1667,98 @@ function ajax_tour_search() {
 }
 add_action('wp_ajax_tour_search', 'ajax_tour_search');
 add_action('wp_ajax_nopriv_tour_search', 'ajax_tour_search');
+
+function custom_tour_endpoint($request) {
+    $type_tour = $request->get_param('type_tour');
+
+    if (!in_array($type_tour, ['trong_nuoc', 'nuoc_ngoai'])) {
+        return new WP_Error('invalid_type_tour', 'Invalid type_tour value', ['status' => 400]);
+    }
+
+    $args = [
+        'post_type' => 'tour',
+        'posts_per_page' => -1,
+        'meta_query' => [
+            [
+                'key' => 'type_tour',
+                'value' => $type_tour,
+                'compare' => '='
+            ]
+        ]
+    ];
+
+    $query = new WP_Query($args);
+    $tours = [];
+
+    while ($query->have_posts()) {
+        $query->the_post();
+
+        // Lấy các taxonomy cho mỗi tour
+        $tour_category = wp_get_post_terms(get_the_ID(), 'tour_category', array("fields" => "names"));
+        $tour_area = wp_get_post_terms(get_the_ID(), 'tour_area', array("fields" => "names"));
+        $national_region = wp_get_post_terms(get_the_ID(), 'national_region', array("fields" => "names"));
+
+        $tours[] = [
+            'title' => get_the_title(),
+            'link' => get_permalink(),
+            'category' => $tour_category,
+            'area' => $tour_area,
+            'region' => $national_region
+        ];
+    }
+
+    wp_reset_postdata();
+
+    return rest_ensure_response($tours);
+}
+
+add_action('rest_api_init', function () {
+    register_rest_route('custom/v1', '/tours', [
+        'methods' => 'GET',
+        'callback' => 'custom_tour_endpoint',
+    ]);
+});
+
+
+
+function filter_tours_by_type($query) {
+    global $pagenow;
+
+    // Kiểm tra nếu đang ở trang quản trị của post type 'tour' và là trang chính
+    if ($pagenow == 'edit.php' && isset($_GET['post_type']) && $_GET['post_type'] == 'tour' && isset($_GET['type_tour'])) {
+        $type_tour = $_GET['type_tour'];
+
+        // Thêm meta query để lọc theo custom field 'type_tour'
+        $query->set('meta_query', [
+            [
+                'key' => 'type_tour',
+                'value' => $type_tour,
+                'compare' => '='
+            ]
+        ]);
+    }
+}
+add_action('pre_get_posts', 'filter_tours_by_type');
+
+
+function add_tour_type_filter() {
+    global $typenow;
+
+    if ($typenow == 'tour') {
+        $selected = isset($_GET['type_tour']) ? $_GET['type_tour'] : '';
+        ?>
+        <select name="type_tour">
+            <option value=""><?php _e('Tất cả các loại', 'textdomain'); ?></option>
+            <option value="trong_nuoc" <?php selected($selected, 'trong_nuoc'); ?>><?php _e('Trong nước', 'textdomain'); ?></option>
+            <option value="nuoc_ngoai" <?php selected($selected, 'nuoc_ngoai'); ?>><?php _e('Nước ngoài', 'textdomain'); ?></option>
+        </select>
+        <?php
+    }
+}
+add_action('restrict_manage_posts', 'add_tour_type_filter');
+
+
+
 
 
 
