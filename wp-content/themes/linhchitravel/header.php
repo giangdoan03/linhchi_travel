@@ -127,7 +127,10 @@
 
         // Hàm fetchTours để lấy dữ liệu và trả về Promise
         function fetchTours(typeTour, taxonomyType) {
-            return fetch(`/linhchi_travel/wp-json/custom/v1/tours?type_tour=${typeTour}`)
+            // Lấy URL gốc của trang (host)
+            const baseUrl = window.location.hostname === 'localhost' ? '/linhchi_travel' : '';
+
+            return fetch(`${baseUrl}/wp-json/custom/v1/tours?type_tour=${typeTour}`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok ' + response.statusText);
@@ -136,6 +139,7 @@
                 })
                 .then(data => groupToursByField(data, taxonomyType));
         }
+
 
         // Hàm hiển thị menu mega với dữ liệu và loại taxonomy
         function displayMegaMenu(groupedTours, taxonomyType) {
@@ -148,7 +152,12 @@
                 // Xác định tham số URL dựa trên taxonomyType
                 const urlParam = taxonomyType === 'area' ? 'tour_area' : 'national_region';
 
-                headerLink.href = `/linhchi_travel/danh-sach-tour/?${urlParam}=${encodeURIComponent(toSlug(groupName))}`;
+                // Kiểm tra xem URL có chứa "localhost" không, nếu có thì thêm "/linhchi_travel", nếu không thì để trống
+                const basePath = window.location.hostname === 'localhost' ? '/linhchi_travel' : '';
+
+                // Gán đường dẫn động cho headerLink.href
+                headerLink.href = `${basePath}/danh-sach-tour/?${urlParam}=${encodeURIComponent(toSlug(groupName))}`;
+
                 headerLink.textContent = groupName;
                 headerLink.style.textDecoration = 'none';
                 headerLink.style.color = 'inherit';
