@@ -170,7 +170,7 @@
 
                 tourList.forEach(tour => {
                     const tourItem = document.createElement('li');
-                    tourItem.innerHTML = `<a href="${tour.link}">${tour.title}</a>`;
+                    tourItem.innerHTML = `<a href="${tour.link}" title="${tour.title}">${tour.title}</a>`;
                     tourItems.appendChild(tourItem);
                 });
 

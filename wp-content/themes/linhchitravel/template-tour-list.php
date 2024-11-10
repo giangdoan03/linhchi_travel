@@ -31,9 +31,11 @@ get_header(); ?>
     <div class="row mt-4">
         <?php
         // Thiết lập các tham số cho WP_Query để lấy bài viết theo custom field `type_tour`
+        $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
         $args = [
             'post_type' => 'tour',
-            'posts_per_page' => -1,
+            'posts_per_page' => 6, // Số lượng bài viết trên mỗi trang
+            'paged' => $paged,
             'meta_query' => [
                 [
                     'key' => 'type_tour',
@@ -82,10 +84,32 @@ get_header(); ?>
         else : ?>
             <p class="text-center"><?php _e('Không tìm thấy tour nào phù hợp.', 'linhchitravel'); ?></p>
         <?php endif;
-
-        // Reset dữ liệu sau query
         wp_reset_postdata();
         ?>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination mt-4">
+        <?php
+        $pagination_links = paginate_links([
+            'total' => $query->max_num_pages,
+            'current' => $paged,
+            'type' => 'array',
+            'prev_text' => '&laquo;',
+            'next_text' => '&raquo;',
+        ]);
+
+        if ($pagination_links) : ?>
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    <?php foreach ($pagination_links as $link) : ?>
+                        <li class="page-item<?php echo strpos($link, 'current') !== false ? ' active' : ''; ?>">
+                            <?php echo str_replace('page-numbers', 'page-link', $link); ?>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            </nav>
+        <?php endif; ?>
     </div>
 </div>
 
