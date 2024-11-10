@@ -157,12 +157,21 @@ get_header(); ?>
         // Cập nhật nhãn giá khi thay đổi thanh trượt
         const priceRange = document.getElementById('price-range');
         const priceLabel = document.getElementById('price-range-label');
+
         priceRange.addEventListener('input', function() {
             priceLabel.textContent = priceRange.value;
+            applyFilters(); // Gọi hàm lọc khi thay đổi giá
         });
 
-        // Xử lý khi nhấn nút "Áp dụng bộ lọc"
-        document.getElementById('apply-filters').addEventListener('click', function() {
+        // Thêm sự kiện cho các checkbox
+        document.querySelectorAll('input[name="taxonomy_filter[]"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                applyFilters(); // Gọi hàm lọc khi thay đổi checkbox
+            });
+        });
+
+        // Hàm áp dụng bộ lọc
+        function applyFilters() {
             // Lấy giá trị của các checkbox đã chọn và khoảng giá
             const selectedTerms = Array.from(document.querySelectorAll('input[name="taxonomy_filter[]"]:checked')).map(cb => cb.value);
             const selectedPrice = priceRange.value;
@@ -209,7 +218,8 @@ get_header(); ?>
                     }
                 })
                 .catch(error => console.error('Error fetching tours:', error));
-        });
+        }
     });
 </script>
+
 
