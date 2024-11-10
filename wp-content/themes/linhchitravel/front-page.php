@@ -84,7 +84,7 @@ get_header(); // Gọi header
             </div>
             <div class="btn_read_more text-center mt-3">
                 <?php
-                $category_url = home_url('/tour-category/tour-trong-nuoc/');
+                $category_url = home_url('/tour-trong-nuoc/');
                 echo '<a href="' . esc_url($category_url) . '" class="btn btn-outline-primary" role="button">Xem thêm Tour</a>';
                 ?>
             </div>
@@ -104,7 +104,7 @@ get_header(); // Gọi header
             </div>
             <div class="btn_read_more text-center mt-3">
                 <?php
-                $category_url = home_url('/tour-category/tour-nuoc-ngoai/');
+                $category_url = home_url('/tour-nuoc-ngoai/');
                 echo '<a href="' . esc_url($category_url) . '" class="btn btn-outline-primary" role="button">Xem thêm Tour</a>';
                 ?>
             </div>
