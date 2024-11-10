@@ -58,9 +58,8 @@ get_header(); ?>
                 ?>
 
                 <!-- Bộ lọc Giá (Thanh trượt) -->
-                <h6 class="mt-4">Giá (triệu VNĐ)</h6>
-                <input type="range" class="form-range" min="1" max="500" step="1" id="price-range" value="250">
-                <p>Giá từ: <span id="price-range-label">250</span> triệu</p>
+<!--                <h6 class="mt-4">Giá (triệu VNĐ)</h6>-->
+<!--                <input type="range" class="form-range" min="1" max="500" step="1" id="price-range" value="1">-->
 
                 <button id="apply-filters" class="btn btn-primary mt-3">Áp dụng bộ lọc</button>
             </div>
@@ -123,29 +122,33 @@ get_header(); ?>
                 ?>
             </div>
 
-            <!-- Pagination -->
-            <div class="pagination mt-4">
-                <?php
-                $pagination_links = paginate_links([
-                    'total' => $query->max_num_pages,
-                    'current' => $paged,
-                    'type' => 'array',
-                    'prev_text' => '&laquo;',
-                    'next_text' => '&raquo;',
-                ]);
+            <div id="pagination-container">
 
-                if ($pagination_links) : ?>
-                    <nav aria-label="Page navigation">
-                        <ul class="pagination justify-content-center">
-                            <?php foreach ($pagination_links as $link) : ?>
-                                <li class="page-item<?php echo strpos($link, 'current') !== false ? ' active' : ''; ?>">
-                                    <?php echo str_replace('page-numbers', 'page-link', $link); ?>
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
-                    </nav>
-                <?php endif; ?>
             </div>
+
+            <!-- Pagination -->
+<!--            <div class="pagination mt-4">-->
+<!--                --><?php
+//                $pagination_links = paginate_links([
+//                    'total' => $query->max_num_pages,
+//                    'current' => $paged,
+//                    'type' => 'array',
+//                    'prev_text' => '&laquo;',
+//                    'next_text' => '&raquo;',
+//                ]);
+//
+//                if ($pagination_links) : ?>
+<!--                    <nav aria-label="Page navigation">-->
+<!--                        <ul class="pagination justify-content-center">-->
+<!--                            --><?php //foreach ($pagination_links as $link) : ?>
+<!--                                <li class="page-item--><?php //echo strpos($link, 'current') !== false ? ' active' : ''; ?><!--">-->
+<!--                                    --><?php //echo str_replace('page-numbers', 'page-link', $link); ?>
+<!--                                </li>-->
+<!--                            --><?php //endforeach; ?>
+<!--                        </ul>-->
+<!--                    </nav>-->
+<!--                --><?php //endif; ?>
+<!--            </div>-->
         </div>
     </div>
 </div>
@@ -154,72 +157,149 @@ get_header(); ?>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Cập nhật nhãn giá khi thay đổi thanh trượt
+        const tourListContainer = document.getElementById('tour-list');
         const priceRange = document.getElementById('price-range');
         const priceLabel = document.getElementById('price-range-label');
+        const paginationContainer = document.getElementById('pagination-container');
 
-        priceRange.addEventListener('input', function() {
-            priceLabel.textContent = priceRange.value;
-            applyFilters(); // Gọi hàm lọc khi thay đổi giá
-        });
+        // Cập nhật nhãn giá khi thay đổi thanh trượt
+        // priceRange.addEventListener('input', function() {
+        //     priceLabel.textContent = priceRange.value;
+        //     applyFilters(); // Gọi hàm lọc khi thay đổi giá
+        // });
 
         // Thêm sự kiện cho các checkbox
         document.querySelectorAll('input[name="taxonomy_filter[]"]').forEach(checkbox => {
-            checkbox.addEventListener('change', function() {
-                applyFilters(); // Gọi hàm lọc khi thay đổi checkbox
-            });
+            checkbox.addEventListener('change', applyFilters); // Gọi hàm lọc khi thay đổi checkbox
         });
 
         // Hàm áp dụng bộ lọc
-        function applyFilters() {
-            // Lấy giá trị của các checkbox đã chọn và khoảng giá
+        function applyFilters(page = 1) {
             const selectedTerms = Array.from(document.querySelectorAll('input[name="taxonomy_filter[]"]:checked')).map(cb => cb.value);
-            const selectedPrice = priceRange.value;
+            // const selectedPrice = priceRange.value;
 
-            // Gửi yêu cầu AJAX đến endpoint tùy chỉnh trong WordPress
-            fetch('<?php echo admin_url('admin-ajax.php'); ?>', {
+            fetch(`<?php echo admin_url('admin-ajax.php'); ?>`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
                 body: new URLSearchParams({
                     action: 'filter_tours',
-                    type_tour: '<?php echo $type_tour; ?>', // Giá trị type_tour (trong_nuoc hoặc nuoc_ngoai)
+                    type_tour: '<?php echo $type_tour; ?>',
                     taxonomy_terms: JSON.stringify(selectedTerms),
-                    max_price: selectedPrice,
+                    // max_price: selectedPrice,
+                    paged: page
                 }),
             })
                 .then(response => response.json())
                 .then(data => {
-                    const tourList = document.getElementById('tour-list');
-                    tourList.innerHTML = ''; // Xóa nội dung cũ
-
+                    tourListContainer.innerHTML = '';
                     if (data.tours && data.tours.length) {
                         data.tours.forEach(tour => {
+                            // Kiểm tra nếu không có thumbnail thì gán hình ảnh mặc định
+                            const thumbnailUrl = tour.thumbnail ? tour.thumbnail : 'https://placehold.co/400x300/png';
+
                             const tourItem = `
-                            <div class="col-md-6 mb-4">
-                                <div class="card h-100">
-                                    <img src="${tour.thumbnail}" class="card-img-top" alt="${tour.title}">
-                                    <div class="card-body">
-                                        <h5 class="card-title">${tour.title}</h5>
-                                        <p class="text-danger"><strong>Giá từ: ${tour.price}</strong></p>
-                                        <p><strong>Khởi hành:</strong> ${tour.departure}</p>
-                                        <p><strong>Thời gian:</strong> ${tour.duration}</p>
-                                        <p><strong>Xuất phát:</strong> ${tour.starting_point}</p>
-                                        <p><strong>Phương tiện:</strong> ${tour.transport}</p>
-                                        <a href="${tour.link}" class="btn btn-outline-info mt-3">Chi tiết Tour</a>
-                                    </div>
-                                </div>
-                            </div>`;
-                            tourList.insertAdjacentHTML('beforeend', tourItem);
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <img src="${thumbnailUrl}" class="card-img-top" alt="${tour.title}">
+                            <div class="card-body">
+                                <h5 class="card-title">${tour.title}</h5>
+                                <p class="text-danger"><strong>Giá từ: ${tour.price}</strong></p>
+                                <p><strong>Khởi hành:</strong> ${tour.departure}</p>
+                                <p><strong>Thời gian:</strong> ${tour.duration}</p>
+                                <p><strong>Xuất phát:</strong> ${tour.starting_point}</p>
+                                <p><strong>Phương tiện:</strong> ${tour.transport}</p>
+                                <a href="${tour.link}" class="btn btn-outline-info mt-3">Chi tiết Tour</a>
+                            </div>
+                        </div>
+                    </div>`;
+                            tourListContainer.insertAdjacentHTML('beforeend', tourItem);
                         });
+
+                        // Cập nhật phân trang
+                        updatePagination(data.max_num_pages, page);
                     } else {
-                        tourList.innerHTML = '<p class="text-center">Không tìm thấy tour nào phù hợp.</p>';
+                        tourListContainer.innerHTML = '<p class="text-center">Không tìm thấy tour nào phù hợp.</p>';
                     }
                 })
                 .catch(error => console.error('Error fetching tours:', error));
         }
+
+
+        // Hàm cập nhật phân trang
+        function updatePagination(totalPages, currentPage) {
+            if (!paginationContainer) return; // Kiểm tra xem phần tử pagination có tồn tại không
+
+            paginationContainer.innerHTML = ''; // Xóa nội dung cũ
+
+            const nav = document.createElement('nav');
+            const ul = document.createElement('ul');
+            ul.classList.add('pagination', 'justify-content-center'); // Sử dụng các lớp phân trang của Bootstrap 5
+
+            // Nút Previous
+            const prevItem = document.createElement('li');
+            prevItem.classList.add('page-item');
+            if (currentPage === 1) prevItem.classList.add('disabled');
+
+            const prevLink = document.createElement('a');
+            prevLink.classList.add('page-link');
+            prevLink.href = '#';
+            prevLink.textContent = '«';
+            prevLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (currentPage > 1) applyFilters(currentPage - 1);
+            });
+
+            prevItem.appendChild(prevLink);
+            ul.appendChild(prevItem);
+
+            // Nút cho từng trang
+            for (let i = 1; i <= totalPages; i++) {
+                const pageItem = document.createElement('li');
+                pageItem.classList.add('page-item');
+                if (i === currentPage) pageItem.classList.add('active');
+
+                const pageLink = document.createElement('a');
+                pageLink.classList.add('page-link');
+                pageLink.href = '#';
+                pageLink.textContent = i;
+                pageLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    applyFilters(i);
+                });
+
+                pageItem.appendChild(pageLink);
+                ul.appendChild(pageItem);
+            }
+
+            // Nút Next
+            const nextItem = document.createElement('li');
+            nextItem.classList.add('page-item');
+            if (currentPage === totalPages) nextItem.classList.add('disabled');
+
+            const nextLink = document.createElement('a');
+            nextLink.classList.add('page-link');
+            nextLink.href = '#';
+            nextLink.textContent = '»';
+            nextLink.addEventListener('click', function(e) {
+                e.preventDefault();x``
+                if (currentPage < totalPages) applyFilters(currentPage + 1);
+            });
+
+            nextItem.appendChild(nextLink);
+            ul.appendChild(nextItem);
+
+            nav.appendChild(ul);
+            paginationContainer.appendChild(nav);
+        }
+
+
+        // Gọi hàm lọc ngay từ đầu để tải nội dung ban đầu
+        applyFilters();
     });
+
+
 </script>
 
 

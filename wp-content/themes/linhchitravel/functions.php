@@ -1759,36 +1759,31 @@ function add_tour_type_filter() {
 }
 add_action('restrict_manage_posts', 'add_tour_type_filter');
 
-
-
 function filter_tours_callback() {
-    $type_tour = sanitize_text_field($_POST['type_tour']);
-    $taxonomy_terms = isset($_POST['taxonomy_terms']) ? json_decode(stripslashes($_POST['taxonomy_terms'])) : [];
-    $max_price = isset($_POST['max_price']) ? floatval($_POST['max_price']) * 1000000 : null; // Chuyển giá trị triệu VNĐ thành VND
+    // Lấy các tham số từ AJAX request
+    $type_tour = $_POST['type_tour'];
+    $taxonomy_terms = json_decode(stripslashes($_POST['taxonomy_terms']));
+    $max_price = $_POST['max_price'];
+    $paged = isset($_POST['paged']) ? $_POST['paged'] : 1;
 
-    $meta_query = [
-        [
-            'key' => 'type_tour',
-            'value' => $type_tour,
-            'compare' => '='
-        ]
-    ];
-
-    // Thêm điều kiện lọc giá nếu có
-    if ($max_price) {
-        $meta_query[] = [
-            'key' => 'gia',
-            'value' => $max_price,
-            'type' => 'NUMERIC',
-            'compare' => '<='
-        ];
-    }
-
-    // Thiết lập query với các điều kiện lọc
+    // Thiết lập các tham số query
     $args = [
         'post_type' => 'tour',
-        'posts_per_page' => -1,
-        'meta_query' => $meta_query,
+        'posts_per_page' => 10,
+        'paged' => $paged,
+        'meta_query' => [
+            [
+                'key' => 'type_tour',
+                'value' => $type_tour,
+                'compare' => '='
+            ],
+//            [
+//                'key' => 'gia',
+//                'value' => $max_price,
+//                'compare' => '<=',
+//                'type' => 'NUMERIC'
+//            ]
+        ]
     ];
 
     if (!empty($taxonomy_terms)) {
@@ -1796,41 +1791,38 @@ function filter_tours_callback() {
             [
                 'taxonomy' => $type_tour === 'trong_nuoc' ? 'national_region' : 'tour_area',
                 'field' => 'slug',
-                'terms' => $taxonomy_terms,
+                'terms' => $taxonomy_terms
             ]
         ];
     }
 
+    // Truy vấn
     $query = new WP_Query($args);
     $tours = [];
 
-    // Lấy dữ liệu bài viết và trả về JSON
-    if ($query->have_posts()) {
-        while ($query->have_posts()) : $query->the_post();
-            $gia_raw = get_field('gia');
-            $gia_clean = preg_replace('/\D/', '', $gia_raw); // Loại bỏ ký tự không phải số
-            $tours[] = [
-                'title' => get_the_title(),
-                'thumbnail' => get_the_post_thumbnail_url(get_the_ID(), 'medium') ?: 'https://placehold.co/400x300/png',
-                'price' => $gia_clean ? number_format($gia_clean, 0, '.', '.') . '₫' : 'Liên hệ',
-                'departure' => get_field('khoi_hanh') ?: 'N/A',
-                'duration' => get_field('thoi_gian') ?: 'N/A',
-                'starting_point' => get_field('xuat_phat') ?: 'N/A',
-                'transport' => get_field('phuong_tien') ?: 'N/A',
-                'link' => get_permalink(),
-            ];
-        endwhile;
-        wp_reset_postdata();
-    }
+    while ($query->have_posts()) : $query->the_post();
+        $tours[] = [
+            'title' => get_the_title(),
+            'link' => get_permalink(),
+            'thumbnail' => get_the_post_thumbnail_url(get_the_ID(), 'medium'),
+            'price' => get_field('gia'),
+            'departure' => get_field('khoi_hanh'),
+            'duration' => get_field('thoi_gian'),
+            'starting_point' => get_field('xuat_phat'),
+            'transport' => get_field('phuong_tien')
+        ];
+    endwhile;
 
-    // Trả về kết quả JSON
-    wp_send_json(['tours' => $tours]);
+    wp_reset_postdata();
+
+    wp_send_json([
+        'tours' => $tours,
+        'max_num_pages' => $query->max_num_pages
+    ]);
 }
+
 add_action('wp_ajax_filter_tours', 'filter_tours_callback');
 add_action('wp_ajax_nopriv_filter_tours', 'filter_tours_callback');
-
-
-
 
 
 
