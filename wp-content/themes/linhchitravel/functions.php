@@ -1825,6 +1825,173 @@ add_action('wp_ajax_filter_tours', 'filter_tours_callback');
 add_action('wp_ajax_nopriv_filter_tours', 'filter_tours_callback');
 
 
+function add_active_class_to_nav_menu($classes, $item) {
+    // Kiểm tra nếu menu là trang hiện tại
+    if (in_array('current-menu-item', $classes) ||
+        in_array('current-menu-parent', $classes) ||
+        in_array('current-menu-ancestor', $classes)) {
+        $classes[] = 'active'; // Thêm class 'active'
+    }
+    return $classes;
+}
+add_filter('nav_menu_css_class', 'add_active_class_to_nav_menu', 10, 2);
+
+
+function register_custom_post_type_du_hoc() {
+    // Đăng ký post type "du_hoc"
+    register_post_type('du_hoc', array(
+        'labels' => array(
+            'name'               => __('Du học', 'textdomain'),
+            'singular_name'      => __('Du học', 'textdomain'),
+            'add_new'            => __('Thêm bài mới', 'textdomain'),
+            'add_new_item'       => __('Thêm bài viết Du học', 'textdomain'),
+            'edit_item'          => __('Chỉnh sửa bài viết', 'textdomain'),
+            'new_item'           => __('Bài viết mới', 'textdomain'),
+            'view_item'          => __('Xem bài viết', 'textdomain'),
+            'search_items'       => __('Tìm kiếm bài viết', 'textdomain'),
+            'not_found'          => __('Không tìm thấy', 'textdomain'),
+            'not_found_in_trash' => __('Không tìm thấy trong thùng rác', 'textdomain'),
+            'all_items'          => __('Tất cả bài viết', 'textdomain'),
+            'menu_name'          => __('Du học', 'textdomain'),
+            'name_admin_bar'     => __('Du học', 'textdomain'),
+        ),
+        'public'        => true,
+        'has_archive'   => true,
+        'rewrite'       => array('slug' => 'du-hoc'),
+        'menu_icon'     => 'dashicons-book', // Icon WordPress
+        'supports'      => array('title', 'editor', 'thumbnail', 'excerpt', 'comments'),
+        'taxonomies'    => array('category_du_hoc'), // Gắn taxonomy riêng
+        'show_in_rest'  => true, // Hỗ trợ Gutenberg Editor
+    ));
+}
+add_action('init', 'register_custom_post_type_du_hoc');
+
+
+function register_taxonomy_category_du_hoc() {
+    // Đăng ký taxonomy "category_du_hoc"
+    register_taxonomy('category_du_hoc', 'du_hoc', array(
+        'labels' => array(
+            'name'              => __('Chuyên mục Du học', 'textdomain'),
+            'singular_name'     => __('Chuyên mục Du học', 'textdomain'),
+            'search_items'      => __('Tìm kiếm chuyên mục', 'textdomain'),
+            'all_items'         => __('Tất cả chuyên mục', 'textdomain'),
+            'parent_item'       => __('Chuyên mục cha', 'textdomain'),
+            'parent_item_colon' => __('Chuyên mục cha:', 'textdomain'),
+            'edit_item'         => __('Chỉnh sửa chuyên mục', 'textdomain'),
+            'update_item'       => __('Cập nhật chuyên mục', 'textdomain'),
+            'add_new_item'      => __('Thêm chuyên mục mới', 'textdomain'),
+            'new_item_name'     => __('Tên chuyên mục mới', 'textdomain'),
+            'menu_name'         => __('Chuyên mục Du học', 'textdomain'),
+        ),
+        'hierarchical' => true, // Hoạt động như Category (dạng phân cấp)
+        'show_in_rest' => true, // Hỗ trợ Gutenberg Editor
+        'rewrite'      => array('slug' => 'chuyen-muc-du-hoc'),
+    ));
+}
+add_action('init', 'register_taxonomy_category_du_hoc');
+
+
+function register_post_type_dinh_cu() {
+    // Đăng ký post type "Định cư"
+    register_post_type('dinh_cu', array(
+        'labels' => array(
+            'name'               => __('Định cư', 'textdomain'),
+            'singular_name'      => __('Định cư', 'textdomain'),
+            'add_new'            => __('Thêm bài mới', 'textdomain'),
+            'add_new_item'       => __('Thêm bài viết Định cư', 'textdomain'),
+            'edit_item'          => __('Chỉnh sửa bài viết', 'textdomain'),
+            'new_item'           => __('Bài viết mới', 'textdomain'),
+            'view_item'          => __('Xem bài viết', 'textdomain'),
+            'search_items'       => __('Tìm kiếm bài viết', 'textdomain'),
+            'not_found'          => __('Không tìm thấy', 'textdomain'),
+            'not_found_in_trash' => __('Không tìm thấy trong thùng rác', 'textdomain'),
+            'all_items'          => __('Tất cả bài viết', 'textdomain'),
+            'menu_name'          => __('Định cư', 'textdomain'),
+            'name_admin_bar'     => __('Định cư', 'textdomain'),
+        ),
+        'public'        => true,
+        'has_archive'   => true,
+        'rewrite'       => array('slug' => 'dinh-cu'),
+        'menu_icon'     => 'dashicons-admin-home',
+        'supports'      => array('title', 'editor', 'thumbnail', 'excerpt', 'comments'),
+        'taxonomies'    => array('category_dinh_cu'),
+        'show_in_rest'  => true,
+    ));
+
+    // Đăng ký taxonomy "Chuyên mục Định cư"
+    register_taxonomy('category_dinh_cu', 'dinh_cu', array(
+        'labels' => array(
+            'name'              => __('Chuyên mục Định cư', 'textdomain'),
+            'singular_name'     => __('Chuyên mục Định cư', 'textdomain'),
+            'search_items'      => __('Tìm kiếm chuyên mục', 'textdomain'),
+            'all_items'         => __('Tất cả chuyên mục', 'textdomain'),
+            'parent_item'       => __('Chuyên mục cha', 'textdomain'),
+            'parent_item_colon' => __('Chuyên mục cha:', 'textdomain'),
+            'edit_item'         => __('Chỉnh sửa chuyên mục', 'textdomain'),
+            'update_item'       => __('Cập nhật chuyên mục', 'textdomain'),
+            'add_new_item'      => __('Thêm chuyên mục mới', 'textdomain'),
+            'new_item_name'     => __('Tên chuyên mục mới', 'textdomain'),
+            'menu_name'         => __('Chuyên mục Định cư', 'textdomain'),
+        ),
+        'hierarchical' => true,
+        'rewrite'      => array('slug' => 'chuyen-muc-dinh-cu'),
+        'show_in_rest' => true,
+    ));
+}
+add_action('init', 'register_post_type_dinh_cu');
+
+
+function register_post_type_ve_may_bay() {
+    // Đăng ký post type "Vé máy bay"
+    register_post_type('ve_may_bay', array(
+        'labels' => array(
+            'name'               => __('Vé máy bay', 'textdomain'),
+            'singular_name'      => __('Vé máy bay', 'textdomain'),
+            'add_new'            => __('Thêm bài mới', 'textdomain'),
+            'add_new_item'       => __('Thêm bài viết Vé máy bay', 'textdomain'),
+            'edit_item'          => __('Chỉnh sửa bài viết', 'textdomain'),
+            'new_item'           => __('Bài viết mới', 'textdomain'),
+            'view_item'          => __('Xem bài viết', 'textdomain'),
+            'search_items'       => __('Tìm kiếm bài viết', 'textdomain'),
+            'not_found'          => __('Không tìm thấy', 'textdomain'),
+            'not_found_in_trash' => __('Không tìm thấy trong thùng rác', 'textdomain'),
+            'all_items'          => __('Tất cả bài viết', 'textdomain'),
+            'menu_name'          => __('Vé máy bay', 'textdomain'),
+            'name_admin_bar'     => __('Vé máy bay', 'textdomain'),
+        ),
+        'public'        => true,
+        'has_archive'   => true,
+        'rewrite'       => array('slug' => 've-may-bay'),
+        'menu_icon'     => 'dashicons-airplane',
+        'supports'      => array('title', 'editor', 'thumbnail', 'excerpt', 'comments'),
+        'taxonomies'    => array('category_ve_may_bay'),
+        'show_in_rest'  => true,
+    ));
+
+    // Đăng ký taxonomy "Chuyên mục Vé máy bay"
+    register_taxonomy('category_ve_may_bay', 've_may_bay', array(
+        'labels' => array(
+            'name'              => __('Chuyên mục Vé máy bay', 'textdomain'),
+            'singular_name'     => __('Chuyên mục Vé máy bay', 'textdomain'),
+            'search_items'      => __('Tìm kiếm chuyên mục', 'textdomain'),
+            'all_items'         => __('Tất cả chuyên mục', 'textdomain'),
+            'parent_item'       => __('Chuyên mục cha', 'textdomain'),
+            'parent_item_colon' => __('Chuyên mục cha:', 'textdomain'),
+            'edit_item'         => __('Chỉnh sửa chuyên mục', 'textdomain'),
+            'update_item'       => __('Cập nhật chuyên mục', 'textdomain'),
+            'add_new_item'      => __('Thêm chuyên mục mới', 'textdomain'),
+            'new_item_name'     => __('Tên chuyên mục mới', 'textdomain'),
+            'menu_name'         => __('Chuyên mục Vé máy bay', 'textdomain'),
+        ),
+        'hierarchical' => true,
+        'rewrite'      => array('slug' => 'chuyen-muc-ve-may-bay'),
+        'show_in_rest' => true,
+    ));
+}
+add_action('init', 'register_post_type_ve_may_bay');
+
+
+
 
 
 

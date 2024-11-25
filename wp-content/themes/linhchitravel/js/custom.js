@@ -312,6 +312,67 @@ jQuery(document).ready(function ($) {
     });
 });
 
+document.addEventListener('DOMContentLoaded', function () {
+    const dropdownMenus = document.querySelectorAll('.menu li ul');
+
+    dropdownMenus.forEach(menu => {
+        const parent = menu.parentNode;
+        parent.addEventListener('mouseenter', () => {
+            menu.style.display = 'block';
+            menu.style.opacity = '0';
+            setTimeout(() => {
+                menu.style.opacity = '1';
+                menu.style.transition = 'opacity 0.3s';
+            }, 0);
+        });
+        parent.addEventListener('mouseleave', () => {
+            menu.style.opacity = '0';
+            menu.style.transition = 'opacity 0.3s';
+            setTimeout(() => {
+                menu.style.display = 'none';
+            }, 300);
+        });
+    });
+});
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    const navbarToggler = document.querySelector('.navbar-toggler');
+    const primaryMenu = document.getElementById('primary-menu');
+
+    // Mở/đóng menu chính
+    navbarToggler.addEventListener('click', function () {
+        primaryMenu.classList.toggle('show');
+    });
+
+    // Menu đa cấp
+    const menuItems = document.querySelectorAll('.menu li');
+    menuItems.forEach(item => {
+        const submenu = item.querySelector('ul');
+        if (submenu) {
+            item.addEventListener('click', function (e) {
+                // Chặn sự kiện click gây trùng lặp
+                e.stopPropagation();
+
+                // Đóng tất cả submenu khác
+                menuItems.forEach(el => {
+                    if (el !== item) el.classList.remove('show');
+                });
+
+                // Mở/đóng submenu hiện tại
+                item.classList.toggle('show');
+            });
+        }
+    });
+});
+document.querySelector('.navbar-toggler').addEventListener('click', function () {
+    const menuIcon = document.getElementById('menu-icon');
+    menuIcon.classList.toggle('bi-list'); // Gạch ngang
+    menuIcon.classList.toggle('bi-x'); // Dấu x
+});
+
+
+
 
 
 

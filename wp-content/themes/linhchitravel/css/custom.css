@@ -1,6 +1,214 @@
 * {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
+@media (min-width: 1400px) {
+    .site-header .container {
+        max-width: 1620px;
+    }
+}
+
+/* Styling for the menu */
+/* Styling for the menu */
+.menu-container {
+    background-color: #fff; /* Nền menu chính màu trắng */
+    font-family: Arial, sans-serif;
+    border-bottom: 1px solid #ddd; /* Viền dưới mỏng */
+}
+
+.menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.menu > li {
+    position: relative;
+}
+
+.menu > li > a {
+    display: block;
+    padding: 10px;
+    color: #000;
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s;
+    text-transform: uppercase;
+}
+
+.menu > li > a:hover {
+    background-color: #f2f2f2; /* Hiệu ứng hover nền xám nhạt */
+    color: #007bff; /* Chữ đen chuyển thành màu xanh */
+}
+
+/* Dropdown menu styles */
+.menu li ul {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    background-color: #fff; /* Nền trắng */
+    display: none;
+    min-width: 200px;
+    z-index: 1000;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng đổ */
+    border-radius: 4px; /* Góc bo tròn */
+    border: 1px solid #ddd; /* Viền mỏng */
+}
+
+.menu li:hover > ul {
+    display: block;
+}
+
+.menu li ul li {
+    position: relative;
+}
+
+.menu li ul li a {
+    display: block;
+    padding: 10px 20px;
+    color: #000; /* Chữ màu đen */
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.menu li ul li a:hover {
+    background-color: #f2f2f2; /* Hiệu ứng hover nền xám nhạt */
+    color: #007bff; /* Chữ chuyển thành màu xanh */
+}
+
+/* Sub-submenu styles (3rd level) */
+.menu li ul li ul {
+    top: 0;
+    left: 100%;
+    display: none;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng đổ */
+    border-radius: 4px;
+}
+
+.menu li ul li:hover > ul {
+    display: block;
+}
+
+/* Active state for the current menu item */
+.menu > li.current-menu-item > a, /* Menu hiện tại */
+.menu > li.current-menu-parent > a, /* Menu cha của menu hiện tại */
+.menu > li.current-menu-ancestor > a { /* Menu tổ tiên của menu hiện tại */
+    background-color: #f2f2f2; /* Nền xám nhạt */
+    color: #007bff; /* Chữ màu xanh */
+    font-weight: bold; /* Đậm chữ */
+}
+
+/* Submenu active */
+.menu li ul li.current-menu-item > a {
+    background-color: #e6e6e6; /* Nền xám nhạt hơn */
+    color: #007bff; /* Chữ xanh */
+    font-weight: bold;
+}
+.navbar-toggler {
+    display: none;
+}
+
+
+@media (max-width: 768px) {
+
+    .menu {
+        display: block;
+    }
+    /* Ẩn menu trên mobile mặc định */
+    .collapse {
+        display: none;
+        transition: all 0.3s ease-in-out;
+    }
+
+    /* Hiển thị menu khi active */
+    .collapse.show {
+        display: block;
+    }
+
+    /* Thiết kế nút mở menu */
+    .navbar-toggler {
+        display: block;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 10px;
+        font-size: 16px;
+        cursor: pointer;
+        margin: 10px 0;
+    }
+
+    /* Icon menu (dùng dấu 3 gạch ngang) */
+    .navbar-toggler-icon {
+        display: block;
+        width: 30px;
+        height: 3px;
+        background-color: #fff;
+        margin: 5px 0;
+    }
+
+    /* Menu đa cấp */
+    .menu-container {
+        background-color: #fff; /* Nền menu */
+        padding: 10px;
+        border: 1px solid #ddd; /* Viền nhẹ */
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng đổ */
+    }
+
+    /* Dropdown trong mobile */
+    .menu li ul {
+        display: none; /* Ẩn submenu mặc định */
+        margin-left: 10px; /* Canh vào một chút */
+        border-left: 2px solid #ddd; /* Đường dẫn dọc */
+    }
+
+    .menu li.show > ul {
+        display: block; /* Hiển thị submenu khi click */
+    }
+
+    /* Hiển thị icon chỉ mục trong menu nhiều cấp */
+    .menu li > a::after {
+        content: '▼'; /* Mũi tên chỉ xuống */
+        float: right;
+        margin-left: 10px;
+        font-size: 12px;
+        color: #000;
+    }
+
+    .menu li.show > a::after {
+        content: '▲'; /* Mũi tên chỉ lên khi mở */
+    }
+
+    /* Ẩn nền và tạo màu sắc cho icon */
+    .navbar-toggler {
+        border: none; /* Không viền */
+        background: none; /* Xóa nền */
+        padding: 0; /* Xóa khoảng cách bên trong */
+        cursor: pointer; /* Đổi con trỏ thành pointer */
+    }
+
+    .navbar-toggler i {
+        font-size: 24px; /* Kích thước icon */
+        color: #333; /* Màu icon */
+        transition: color 0.3s ease; /* Hiệu ứng màu */
+    }
+
+    /* Hiệu ứng hover cho icon */
+    .navbar-toggler:hover i {
+        color: #007bff; /* Đổi màu icon khi hover */
+    }
+
+    .no-pd-menu-mobile {
+        padding: 0;
+    }
+
+    .navbar-toggler {
+        display: block;
+    }
+}
+
 
 .custom-logo-link img {
     width: 200px;

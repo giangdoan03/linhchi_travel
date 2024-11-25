@@ -72,7 +72,7 @@ get_header(); ?>
             if ($query->have_posts()) :
                 echo '<div class="row">';
                 while ($query->have_posts()) : $query->the_post(); ?>
-                    <div class="col-md-6 mb-4">
+                    <div class="col-md-4 mb-4">
                         <div class="card h-100">
                             <?php
                             if (has_post_thumbnail()) {

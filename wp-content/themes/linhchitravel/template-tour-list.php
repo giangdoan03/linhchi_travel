@@ -87,7 +87,7 @@ get_header(); ?>
 
                 if ($query->have_posts()) :
                     while ($query->have_posts()) : $query->the_post(); ?>
-                        <div class="col-md-6 mb-4">
+                        <div class="col-md-4 mb-4">
                             <div class="card h-100">
                                 <?php if (has_post_thumbnail()) : ?>
                                     <img src="<?php the_post_thumbnail_url('medium'); ?>" class="card-img-top" alt="<?php the_title(); ?>">
@@ -200,7 +200,7 @@ get_header(); ?>
                             const thumbnailUrl = tour.thumbnail ? tour.thumbnail : 'https://placehold.co/400x300/png';
 
                             const tourItem = `
-                    <div class="col-md-6 mb-4">
+                    <div class="col-md-4 mb-4">
                         <div class="card h-100">
                             <img src="${thumbnailUrl}" class="card-img-top" alt="${tour.title}">
                             <div class="card-body">
