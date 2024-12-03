@@ -1256,9 +1256,9 @@ ul.list-unstyled li .text_label {
     width: 20px;
     height: 20px;
     color: #f8f9fa;
-    font-size: 24px;
+    font-size: 30px;
     user-select: none;
-    z-index: 9999; /* Đảm bảo không bị che khuất */
+    z-index: 9999;
     animation: snow-fall 10s linear infinite;
 }
 
