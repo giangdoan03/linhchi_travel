@@ -1249,6 +1249,62 @@ ul.list-unstyled li .text_label {
     text-decoration: underline;
 }
 
+/* CSS cho hiệu ứng tuyết */
+.snowflake {
+    position: fixed;
+    top: -20px; /* Đảm bảo tuyết xuất hiện trên cùng */
+    width: 20px;
+    height: 20px;
+    color: #f8f9fa;
+    font-size: 24px;
+    user-select: none;
+    z-index: 9999; /* Đảm bảo không bị che khuất */
+    animation: snow-fall 10s linear infinite;
+}
+
+
+@keyframes snow-fall {
+    0% {
+        transform: translateY(-100px);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh);
+        opacity: 0;
+    }
+}
+
+/* CSS cho hiệu ứng hoa đào */
+.petal {
+    position: fixed;
+    top: -20px; /* Đảm bảo hoa đào xuất hiện trên cùng */
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    opacity: 0.8;
+    z-index: 9999; /* Đảm bảo không bị che khuất */
+    animation: petal-fall 6s linear infinite;
+}
+
+body, html {
+    height: 100%;
+    margin: 0;
+    position: relative; /* Đảm bảo các hiệu ứng nằm trong body */
+}
+
+@keyframes petal-fall {
+    0% {
+        transform: translateY(-100px) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh) rotate(180deg);
+        opacity: 0;
+    }
+}
+
+
+
 /* Thiết lập cho mobile */
 @media (max-width: 768px) {
     /* Đặt menu mega thành toàn màn hình trên thiết bị di động */

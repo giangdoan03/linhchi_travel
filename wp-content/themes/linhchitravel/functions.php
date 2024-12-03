@@ -652,6 +652,40 @@ if( function_exists('acf_add_options_page') ) {
 }
 
 
+if( function_exists('acf_add_options_page') ) {
+    acf_add_options_page(array(
+        'page_title'    => 'Cài đặt hiệu ứng',
+        'menu_title'    => 'Hiệu ứng',
+        'menu_slug'     => 'effect-settings',
+        'capability'    => 'edit_posts',
+        'redirect'      => false
+    ));
+}
+
+function save_effect_setting() {
+    // Lấy giá trị từ trường "bật" (Checkbox)
+    $bat = get_field('bat', 'option');
+
+    if ($bat) {
+        // Nếu bật, lấy giá trị của trường "hieu_ung"
+        $hieu_ung = get_field('hieu_ung', 'option');
+
+        // Lưu vào localStorage cho JavaScript
+        echo "<script>
+            localStorage.setItem('effect', '{$hieu_ung}');
+        </script>";
+    } else {
+        // Nếu không bật, xóa giá trị khỏi localStorage
+        echo "<script>
+            localStorage.removeItem('effect');
+        </script>";
+    }
+}
+add_action('wp_footer', 'save_effect_setting');
+
+
+
+
 // Tạo shortcode hiển thị slider Swiper cho post type 'tour' và taxonomy 'tour_category' với tag_ID = 3
 function tour_slider_shortcode($atts) {
     // Truy vấn các bài viết thuộc post type 'tour' và 'tour_category' với ID = 3
