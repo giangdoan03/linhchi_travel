@@ -206,7 +206,7 @@
 
         // Hàm tạo liên kết cho footer
         function populateFooterLinks(container, groupedTours, taxonomyType) {
-            Object.keys(groupedTours).slice(0, 4).forEach(groupName => {  // Hiển thị tối đa 4 mục
+            Object.keys(groupedTours).slice(0, 5).forEach(groupName => {  // Hiển thị tối đa 4 mục
                 const link = document.createElement('p');
                 const anchor = document.createElement('a');
 

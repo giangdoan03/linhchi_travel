@@ -372,6 +372,78 @@ document.querySelector('.navbar-toggler').addEventListener('click', function () 
 });
 
 
+document.addEventListener('DOMContentLoaded', function() {
+    // Kiểm tra giá trị trong localStorage sau khi DOM đã tải xong
+    applyEffect();
+
+    // Lắng nghe sự kiện cuộn trang để cập nhật hiệu ứng
+    window.addEventListener('scroll', function() {
+        // Tuyết và hoa sẽ tiếp tục rơi bất kể cuộn trang
+    });
+});
+
+// Hàm áp dụng hiệu ứng tuyết hoặc hoa đào
+function applyEffect() {
+    const effect = localStorage.getItem('effect'); // Lấy giá trị 'effect' từ localStorage
+
+    if (effect === 'snow') {
+        createSnowflakes();  // Tạo hiệu ứng tuyết
+    } else if (effect === 'petals') {
+        createPetals();  // Tạo hiệu ứng hoa đào
+    }
+}
+
+// Tạo hiệu ứng tuyết
+function createSnowflakes() {
+    const snowflakeCount = 50; // Tăng số lượng tuyết rơi
+    const snowflakeCharacters = ["❅", "❄", "❆"]; // Mảng các ký tự tuyết
+
+    for (let i = 0; i < snowflakeCount; i++) {
+        let snowflake = document.createElement('div');
+        snowflake.classList.add('snowflake');
+
+        // Chọn ngẫu nhiên ký tự từ mảng
+        const randomSnowflake = snowflakeCharacters[Math.floor(Math.random() * snowflakeCharacters.length)];
+        snowflake.textContent = randomSnowflake;  // Gán ký tự cho bông tuyết
+
+        // Kích thước ngẫu nhiên từ 10px đến 30px
+        const size = Math.random() * 20 + 10; // Random size between 10px and 30px
+        snowflake.style.width = `${size}px`;
+        snowflake.style.height = `${size}px`;
+
+        snowflake.style.left = `${Math.random() * 100}%`; // Tuyết xuất hiện ngẫu nhiên ở vị trí ngang
+        snowflake.style.animationDuration = `${Math.random() * 10 + 5}s`; // Tốc độ rơi ngẫu nhiên
+        snowflake.style.animationDelay = `${Math.random() * 5}s`; // Trễ bắt đầu ngẫu nhiên
+        document.body.appendChild(snowflake);
+    }
+}
+
+// Tạo hiệu ứng hoa đào hoặc hoa mai
+function createPetals() {
+    const petalCount = 50; // Số lượng hoa
+    const flowerCharacters = ["🌸"]; // Mảng chứa ký tự hoa đào và hoa mai
+
+    for (let i = 0; i < petalCount; i++) {
+        let petal = document.createElement('div');
+        petal.classList.add('petal');
+
+        // Chọn ngẫu nhiên ký tự từ mảng hoa
+        const randomFlower = flowerCharacters[Math.floor(Math.random() * flowerCharacters.length)];
+        petal.textContent = randomFlower;  // Gán ký tự hoa đào hoặc hoa mai
+
+        // Kích thước ngẫu nhiên từ 10px đến 30px
+        const size = Math.random() * 20 + 10; // Random size between 10px and 30px
+        petal.style.fontSize = `${size}px`; // Đặt font-size thay vì width và height
+
+        petal.style.left = `${Math.random() * 100}%`; // Hoa xuất hiện ngẫu nhiên trên màn hình
+        petal.style.animationDuration = `${Math.random() * 10 + 5}s`; // Tốc độ rơi ngẫu nhiên
+        petal.style.animationDelay = `${Math.random() * 5}s`; // Trễ bắt đầu ngẫu nhiên
+        document.body.appendChild(petal);
+    }
+}
+
+
+
 
 
 
