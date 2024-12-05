@@ -159,6 +159,33 @@ jQuery(document).ready(function ($) {
         }
     });
 
+
+    var swiper6 = new Swiper('.list_sale_banner', {
+        loop: true,
+        nextButton: '.swiper-button-prev-6',
+        prevButton: '.swiper-button-next-6',
+        slidesPerView: 3,
+        pagination: {
+            el: '.list_sale_banner .swiper-pagination',
+            clickable: true,
+        },
+        spaceBetween: 20,
+        breakpoints: {
+            1920: {
+                slidesPerView: 3,
+                spaceBetween: 20
+            },
+            768: {
+                slidesPerView: 2,
+                spaceBetween: 20
+            },
+            600: {
+                slidesPerView: 1,
+                spaceBetween: 20
+            }
+        }
+    });
+
     $('#menu-btn').on('click', function(){
         // Kiểm tra nếu tour-list-container đang hiển thị
         if ($('#tour-list-container').css('display') === 'block') {
@@ -441,6 +468,12 @@ function createPetals() {
         document.body.appendChild(petal);
     }
 }
+
+
+document.addEventListener("DOMContentLoaded", function () {
+
+});
+
 
 
 

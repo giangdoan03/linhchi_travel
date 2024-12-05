@@ -580,6 +580,7 @@ function display_tour_posts_swiper_shortcode($atts) {
             $ma_tour = get_field('ma_tour');
             $thoi_gian = get_field('thoi_gian');
             $phuong_tien = get_field('phuong_tien');
+            $ngay_khoi_hanh = get_field('ngay_khoi_hanh');
 
             // Lấy giá tour
             $gia_raw = get_field('gia');
@@ -590,7 +591,7 @@ function display_tour_posts_swiper_shortcode($atts) {
             $output .= '<p class="text-danger"><strong>' . esc_html($gia_formatted) . '</strong></p>';
 
 
-            $output .= '<p style="white-space: pre-wrap;"><span>Mã Tour:</span> ' . esc_html($ma_tour) . '</p>';
+            $output .= '<p style="white-space: pre-wrap;"><span>Ngày khởi hành:</span> ' . esc_html($ngay_khoi_hanh) . '</p>';
             // Lấy số sao của khách sạn
             $hotel_number_star = get_field('hotel_number_star');
             $output .= '<p><span>Khách sạn:</span> ';
@@ -741,6 +742,7 @@ function tour_slider_shortcode($atts) {
             $ma_tour = get_field('ma_tour');
             $thoi_gian = get_field('thoi_gian');
             $phuong_tien = get_field('phuong_tien');
+            $ngay_khoi_hanh = get_field('ngay_khoi_hanh');
 
             // Lấy giá tour
             $gia_raw = get_field('gia');
@@ -751,7 +753,7 @@ function tour_slider_shortcode($atts) {
             $output .= '<p class="text-danger"><strong>' . esc_html($gia_formatted) . '</strong></p>';
 
 
-            $output .= '<p style="white-space: pre-wrap;"><span>Mã Tour:</span> ' . esc_html($ma_tour) . '</p>';
+            $output .= '<p style="white-space: pre-wrap;"><span>Ngày khởi hành:</span> ' . esc_html($ngay_khoi_hanh) . '</p>';
             // Lấy số sao của khách sạn
             $hotel_number_star = get_field('hotel_number_star');
             $output .= '<p><span>Khách sạn:</span> ';

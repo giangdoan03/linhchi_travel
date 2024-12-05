@@ -12,36 +12,46 @@ get_header(); // Gọi header
         ?>
         <?php echo do_shortcode('[ajax_tour_search_form]'); ?>
     </div>
-    <div class="title-block title_why_choose">
-        <h2>TẠI SAO NÊN CHỌN DỊCH VỤ TẠI LINH CHI TRAVEL ?</h2>
-        <div class="bg-bottom-title"></div>
+    <div class="banner_sale space_block">
+        <div class="container">
+            <?php
+            // Lấy giá trị từ ACF field group
+            $title_sale = get_field('title_sale', 'option'); // Lấy tiêu đề
+            $banner_sale_images = get_field('banner_sale_image', 'option'); // Lấy repeater
+            ?>
+            <div class="title-block title_why_choose">
+                <h2><?php echo esc_html($title_sale); // Hiển thị tiêu đề ?></h2>
+                <div class="bg-bottom-title"></div>
+            </div>
+
+            <div class="list_sale_banner swiper">
+                <div class="swiper-wrapper">
+                    <?php if (!empty($banner_sale_images)) : // Kiểm tra nếu có dữ liệu ?>
+                        <?php foreach ($banner_sale_images as $banner) : // Lặp qua từng item ?>
+                            <?php
+                            $banner_item = $banner['banner_item']; // Lấy ảnh
+                            $link_uu_dai = $banner['link_uu_dai']; // Lấy link ưu đãi
+                            ?>
+                            <div class="swiper-slide item">
+                                <div class="box_img">
+                                    <a href="<?php echo esc_url($link_uu_dai); ?>" target="_blank" rel="noopener">
+                                        <img src="<?php echo esc_url($banner_item['url']); ?>" alt="<?php echo esc_attr($banner_item['alt']); ?>">
+                                    </a>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </div>
+                <!-- Add Pagination -->
+                <div class="swiper-pagination"></div>
+                <!-- Add Navigation -->
+                <div class="swiper-button-next swiper-button-next-6"></div>
+                <div class="swiper-button-prev swiper-button-prev-6"></div>
+            </div>
+
+        </div>
     </div>
-    <div class="intro_block space_block">
-        <div class="item">
-            <div class="avt bg-1">
-                <img src="<?php echo get_template_directory_uri(); ?>/images/ic-like-2.png" alt="Giá tour cạnh tranh">
-            </div>
-            <div class="desc">
-                <p>Giá tour cạnh tranh</p>
-            </div>
-        </div>
-        <div class="item">
-            <div class="avt bg-2">
-                <img src="<?php echo get_template_directory_uri(); ?>/images/ic-laptop.png" alt="Đặt tour nhanh chóng &amp; dễ dàng">
-            </div>
-            <div class="desc">
-                <p>Đặt tour nhanh chóng &amp; dễ dàng</p>
-            </div>
-        </div>
-        <div class="item">
-            <div class="avt bg-3">
-                <img src="<?php echo get_template_directory_uri(); ?>/images/ic-chatluong.png" alt="Chất lượng dịch vụ tốt">
-            </div>
-            <div class="desc">
-                <p>Chất lượng dịch vụ tốt</p>
-            </div>
-        </div>
-    </div>
+
 
     <div class="tour_hot_block list_tour_slide space_block">
         <div class="container">
